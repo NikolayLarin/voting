@@ -28,7 +28,6 @@ public class Dish extends AbstractBaseEntity {
     @Size(min = 2, max = 120)
     private String name;
 
-
     // in cents
     @Column(name = "price", nullable = false)
     @Range(min = 1)

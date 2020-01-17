@@ -21,6 +21,6 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
     @Transactional
     Vote save(Vote item);
 
-    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.dateTime DESC")
+    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
     List<Vote> getAll(@Param("userId") int userId);
 }

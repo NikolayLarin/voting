@@ -11,25 +11,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
+import java.security.cert.LDAPCertStoreParameters;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames =
-        {"id", "user_id"}, name = "votes_unique_id_user_idx")})
+        {"date", "user_id"}, name = "votes_unique_date_user_idx")})
 public class Vote extends AbstractBaseEntity {
 
 
-    @Column(name = "date_time", nullable = false)
+    @Column(name = "date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date = LocalDate.now();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
@@ -38,19 +40,19 @@ public class Vote extends AbstractBaseEntity {
     public Vote() {
     }
 
-    public Vote(Integer id, LocalDateTime dateTime, User user, Restaurant restaurant) {
+    public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);
-        this.dateTime = dateTime;
+        this.date = date;
         this.user = user;
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate dateTime) {
+        this.date = dateTime;
     }
 
     public User getUser() {
@@ -67,5 +69,13 @@ public class Vote extends AbstractBaseEntity {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "id=" + id +
+                ", user =" + user +
+                ", restaurant=" + restaurant +
+                '}';
     }
 }

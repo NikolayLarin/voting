@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public class DataJpaRestaurantRepository implements RestaurantRepository {
-    private static final Sort SORT_BY_ID = Sort.by(Sort.Direction.ASC, "id");
+    private static final Sort SORT_BY_NAME = Sort.by(Sort.Direction.ASC, "name");
 
     private final CrudRestaurantRepository crudRepository;
 
@@ -38,6 +38,6 @@ public class DataJpaRestaurantRepository implements RestaurantRepository {
 
     @Override
     public List<Restaurant> getAll() {
-        return crudRepository.findAll(SORT_BY_ID);
+        return crudRepository.findAll(SORT_BY_NAME);
     }
 }

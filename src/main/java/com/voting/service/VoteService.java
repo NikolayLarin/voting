@@ -22,16 +22,16 @@ public class VoteService {
         this.repository = repository;
     }
 
-    public Vote create(Vote vote, int userId, int restaurantId) {
-        return save(vote, userId, restaurantId);
+    public Vote create(int userId, int restaurantId) {
+        return save(new Vote(), userId, restaurantId);
     }
 
     public void delete(int id, int userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
-    public Vote get(int id, int restaurantId) {
-        return checkNotFoundWithId(repository.get(id, restaurantId), id);
+    public Vote get(int id, int userId) {
+        return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
     public List<Vote> getAll(int userId) {
@@ -46,7 +46,7 @@ public class VoteService {
     }
 
     private Vote save(Vote vote, int userId, int restaurantId) {
-        Assert.notNull(vote, "dish must not be null");
+        Assert.notNull(vote, "vote must not be null");
         return checkNotFoundWithId(repository.save(vote, userId, restaurantId), vote.getId());
     }
 }

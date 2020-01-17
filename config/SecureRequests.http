@@ -1,0 +1,96 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+################  AdminRestController  ################
+
+# createWithLocation restaurant
+POST http://localhost:8080/voting/admin/restaurants
+Content-Type: application/json
+
+{
+  "name": "Новый ресторан"
+}
+
+###
+
+# update restaurant
+PUT http://localhost:8080/voting/admin/restaurants/100032
+Content-Type: application/json
+
+{
+  "name": "New restaurant"
+}
+
+###
+
+# createWithLocation dish for restaurant
+POST http://localhost:8080/voting/admin/restaurants/100032/dishes
+Content-Type: application/json
+
+{
+  "date": "2020-01-17",
+  "name": "New Dish",
+  "price": 2200
+}
+
+###
+# update dish for restaurant
+PUT http://localhost:8080/voting/admin/restaurants/100032/dishes/100033
+Content-Type: application/json
+
+{
+  "date": "2020-01-17",
+  "name": "New Dish Updated",
+  "price": 2200
+}
+
+###
+
+#delete dish
+DELETE http://localhost:8080/voting/admin/restaurants/100032/dishes/100033
+
+###
+
+#delete restaurant
+DELETE http://localhost:8080/voting/admin/restaurants/100032
+
+###
+
+
+################  VoteRestController  ################
+
+#getAll votes of current user)
+GET http://localhost:8080/voting/votes
+
+###
+
+#get vote of current user
+GET http://localhost:8080/voting/votes/100031
+
+###
+
+#create vote of current user for restaurant
+POST http://localhost:8080/voting/votes/100002
+
+###
+
+# update vote of current user for restaurant
+PUT http://localhost:8080/voting/votes/100003
+Content-Type: application/json
+
+{
+  "id": 100032,
+  "date": "2020-01-17"
+}
+
+###
+
+# delete vote of current user
+DELETE http://localhost:8080/voting/votes/100032
+
+###
