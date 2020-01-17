@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,15 +38,17 @@ public class DishRestController {
         return service.getTodayMenus();
     }
 
+
     @GetMapping("/{restaurantId}")
-    public List<Dish> getAllOnDate(@RequestParam LocalDate date, @PathVariable int restaurantId) {
+    public List<Dish> getMenuOnDate(@RequestParam @NonNull LocalDate date,
+                                   @PathVariable int restaurantId) {
         log.info("get menu on date {} for restaurant {}", date, restaurantId);
-        return service.getAllOnDate(date, restaurantId);
+        return service.getMenuOnDate(date, restaurantId);
     }
 
     @GetMapping("/{restaurantId}/filter")
-    public List<Dish> getBetween(@RequestParam @NonNull LocalDate startDate,
-                                 @RequestParam @NonNull LocalDate endDate,
+    public List<Dish> getBetween(@RequestParam @Nullable LocalDate startDate,
+                                 @RequestParam @Nullable LocalDate endDate,
                                  @PathVariable int restaurantId) {
         log.info("getAll dishes of restaurant {} between dates ({} – {})", restaurantId, startDate, endDate);
         return service.getBetweenInclusive(startDate, endDate, restaurantId);

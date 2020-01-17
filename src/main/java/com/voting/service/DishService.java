@@ -9,6 +9,8 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.voting.util.DateTimeUtil.getEndExclusive;
+import static com.voting.util.DateTimeUtil.getStartInclusive;
 import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -37,8 +39,8 @@ public class DishService {
         return repository.getAll(restaurantId);
     }
 
-    public List<Dish> getAllOnDate(LocalDate date, int restaurantId) {
-        return repository.getAllOnDate(date, restaurantId);
+    public List<Dish> getMenuOnDate(LocalDate date, int restaurantId) {
+        return repository.getMenuOnDate(date, restaurantId);
     }
 
     public List<Dish> getTodayMenus() {
@@ -46,7 +48,10 @@ public class DishService {
     }
 
     public List<Dish> getBetweenInclusive(LocalDate startDate, LocalDate endDate, int restaurantId) {
-        return repository.getBetweenInclusive(startDate, endDate, restaurantId);
+        return repository.getBetweenInclusive(
+                getStartInclusive(startDate).toLocalDate(),
+                getEndExclusive(endDate).toLocalDate(),
+                restaurantId);
     }
 
     public void update(Dish dish, int restaurantId) {

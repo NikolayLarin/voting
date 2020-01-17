@@ -20,7 +20,7 @@ public interface DishRepository {
     List<Dish> getAll(int restaurantId);
 
     // ORDERED by price asc
-    List<Dish> getAllOnDate(@NonNull LocalDate date, int restaurantId);
+    List<Dish> getMenuOnDate(@NonNull LocalDate date, int restaurantId);
 
     // ORDERED by price asc
     List<Dish> getDayMenus(@NonNull LocalDate date);
