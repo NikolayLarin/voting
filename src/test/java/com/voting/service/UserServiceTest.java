@@ -2,7 +2,7 @@ package com.voting.service;
 
 import com.voting.UserTestData;
 import com.voting.model.User;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.voting.UserTestData.assertMatch;
