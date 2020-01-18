@@ -45,7 +45,7 @@ public class DataJpaVoteRepository implements VoteRepository {
     public Vote get(int id, int userId) {
         return crudVoteRepository
                 .findById(id)
-                .filter(dish -> dish.getUser().getId() == userId)
+                .filter(vote -> vote.getUser().getId() == userId)
                 .orElse(null);
     }
 

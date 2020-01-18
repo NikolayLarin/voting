@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.time.LocalTime;
 import java.util.List;
 
+import static com.voting.util.DateTimeUtil.isVotingTimeExpired;
 import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -39,7 +39,7 @@ public class VoteService {
     }
 
     public void update(Vote vote, int userId, int restaurantId) {
-        if (LocalTime.now().isBefore(LocalTime.of(11, 0))) {
+        if (isVotingTimeExpired()) {
             throw new IllegalRequestDataException("Voting time expired at 11:00 AM");
         }
         save(vote, userId, restaurantId);

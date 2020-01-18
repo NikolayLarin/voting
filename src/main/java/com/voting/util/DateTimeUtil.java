@@ -16,6 +16,8 @@ public class DateTimeUtil {
     private static final LocalDateTime MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
     private static final LocalDateTime MAX_DATE = LocalDateTime.of(3000, 1, 1, 0, 0);
 
+    private static final LocalTime VOTING_EXPIRING_TIME = LocalTime.of(11, 00);
+
     private DateTimeUtil() {
     }
 
@@ -39,5 +41,9 @@ public class DateTimeUtil {
 
     public static LocalDateTime getEndExclusive(LocalDate localDate) {
         return localDate != null ? localDate.plus(1, ChronoUnit.DAYS).atStartOfDay() : MAX_DATE;
+    }
+
+    public static boolean isVotingTimeExpired() {
+        return LocalTime.now().isAfter(VOTING_EXPIRING_TIME);
     }
 }

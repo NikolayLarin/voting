@@ -13,15 +13,20 @@ public class UserTestData {
     public static final int USER_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
 
-    public static final User USER = new User(USER_ID, "user@yandex.ru", "password", Role.ROLE_USER);
-    public static final User ADMIN = new User(ADMIN_ID, "admin@gmail.com", "admin", Role.ROLE_ADMIN, Role.ROLE_USER);
+    public static final User USER = new User(
+            USER_ID, "user@gmail.com", "password", Role.ROLE_USER);
+
+    public static final User ADMIN = new User(
+            ADMIN_ID, "admin@gmail.com", "admin", Role.ROLE_ADMIN, Role.ROLE_USER);
 
     public static User getNew() {
-        return new User(null, "new@gmail.com", "newPass", Collections.singleton(Role.ROLE_USER));
+        return new User(
+                null, "new@gmail.com", "newPass", Collections.singleton(Role.ROLE_USER));
     }
 
     public static User getNewWithEmptyRoles() {
-        return new User(null, "newWithNoRoles@gmail.com", "newPass", Collections.emptySet());
+        return new User(
+                null, "newWithNoRoles@gmail.com", "newPass", Collections.emptySet());
     }
 
     public static User getUpdated() {
@@ -31,7 +36,7 @@ public class UserTestData {
     }
 
     public static void assertMatch(User actual, User expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "meals");
+        assertThat(actual).isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<User> actual, User... expected) {
@@ -39,6 +44,6 @@ public class UserTestData {
     }
 
     public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("meals").isEqualTo(expected);
+        assertThat(actual).usingDefaultElementComparator().isEqualTo(expected);
     }
 }

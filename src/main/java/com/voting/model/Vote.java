@@ -11,9 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-import java.security.cert.LDAPCertStoreParameters;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames =
@@ -38,6 +36,10 @@ public class Vote extends AbstractBaseEntity {
     private Restaurant restaurant;
 
     public Vote() {
+    }
+
+    public Vote(Vote v) {
+        this(v.getId(), v.getDate(), v.getUser(), v.getRestaurant());
     }
 
     public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
@@ -70,12 +72,11 @@ public class Vote extends AbstractBaseEntity {
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
+
     @Override
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", user =" + user +
-                ", restaurant=" + restaurant +
                 '}';
     }
 }
