@@ -6,6 +6,13 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
+
+
+################   All Create requests MUST RUNS ONCE   ################
+################     and starting from the beginning    ################
+################         to save entities id's          ################
+
+
 ################  AdminRestController  ################
 
 # createWithLocation restaurant
@@ -19,7 +26,7 @@ Content-Type: application/json
 ###
 
 # update restaurant
-PUT http://localhost:8080/voting/admin/restaurants/100032
+PUT http://localhost:8080/voting/admin/restaurants/100030
 Content-Type: application/json
 
 {
@@ -29,7 +36,7 @@ Content-Type: application/json
 ###
 
 # createWithLocation dish for restaurant
-POST http://localhost:8080/voting/admin/restaurants/100032/dishes
+POST http://localhost:8080/voting/admin/restaurants/100030/dishes
 Content-Type: application/json
 
 {
@@ -40,7 +47,7 @@ Content-Type: application/json
 
 ###
 # update dish for restaurant
-PUT http://localhost:8080/voting/admin/restaurants/100032/dishes/100033
+PUT http://localhost:8080/voting/admin/restaurants/100030/dishes/100031
 Content-Type: application/json
 
 {
@@ -52,12 +59,12 @@ Content-Type: application/json
 ###
 
 #delete dish
-DELETE http://localhost:8080/voting/admin/restaurants/100032/dishes/100033
+DELETE http://localhost:8080/voting/admin/restaurants/100030/dishes/100031
 
 ###
 
 #delete restaurant
-DELETE http://localhost:8080/voting/admin/restaurants/100032
+DELETE http://localhost:8080/voting/admin/restaurants/100030
 
 ###
 
@@ -70,7 +77,7 @@ GET http://localhost:8080/voting/votes
 ###
 
 #get vote of current user
-GET http://localhost:8080/voting/votes/100031
+GET http://localhost:8080/voting/votes/100028
 
 ###
 
