@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantRestController {
-
     static final String REST_URL = "/restaurants";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());

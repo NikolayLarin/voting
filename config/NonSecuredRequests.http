@@ -6,8 +6,7 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
-################  DishRestController  ################
-
+################           DishRestController           ################
 # getTodayMenus
 GET http://localhost:8080/voting/menus
 
@@ -43,11 +42,11 @@ GET http://localhost:8080/voting/menus/100002/filter
 GET http://localhost:8080/voting/menus/100002/filter?startDate=&endDate=
 
 ###
+###############################  end  ##################################
 
 
-################  RestaurantRestController  ################
-
-#getAll
+################        RestaurantRestController        ################
+#getAll returns all restaurants
 GET http://localhost:8080/voting/restaurants
 
 ###
@@ -67,7 +66,8 @@ GET http://localhost:8080/voting/restaurants/100002/dishes/100005
 
 ###
 
-#get throws NotFoundException if dish don't belong to restaurant
+#get throws NotFoundException: dish don't belong to restaurant
 GET http://localhost:8080/voting/restaurants/100002/dishes/100007
 
 ###
+###############################  end  ##################################

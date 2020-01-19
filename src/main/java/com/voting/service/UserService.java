@@ -2,7 +2,12 @@ package com.voting.service;
 
 import com.voting.model.User;
 import com.voting.repository.user.UserRepository;
+import com.voting.web.AuthorizedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -11,8 +16,9 @@ import java.util.List;
 import static com.voting.util.ValidationUtil.checkNotFound;
 import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 
-@Service
-public class UserService {
+@Service("userService")
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
 
@@ -35,7 +41,7 @@ public class UserService {
 
     public User getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
-        return checkNotFound(repository.getByEmail(email), "email=" + email);
+        return checkNotFound(repository.getByEmail(email.toLowerCase()), "email=" + email);
     }
 
     public List<User> getAll() {
@@ -49,5 +55,14 @@ public class UserService {
     private User save(User user) {
         Assert.notNull(user, "user must not be null");
         return checkNotFoundWithId(repository.save(user), user.getId());
+    }
+
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User with " + email + " not found");
+        }
+        return new AuthorizedUser(user);
     }
 }

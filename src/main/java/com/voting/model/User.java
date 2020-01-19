@@ -59,7 +59,7 @@ public class User extends AbstractBaseEntity {
 
     public User(Integer id, String email, String password, Collection<Role> roles) {
         super(id);
-        this.email = email;
+        this.email = email.toLowerCase();
         this.password = password;
         setRoles(roles);
     }
@@ -69,7 +69,7 @@ public class User extends AbstractBaseEntity {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     public void setPassword(String password) {

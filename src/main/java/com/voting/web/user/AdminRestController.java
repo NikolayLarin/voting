@@ -28,8 +28,7 @@ import static com.voting.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController {
-
-    static final String REST_URL = "/admin/restaurants";
+    static final String REST_URL = "/auth/admin/restaurants";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
