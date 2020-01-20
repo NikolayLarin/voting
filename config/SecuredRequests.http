@@ -101,7 +101,7 @@ Authorization: Basic user@gmail.com password
 ###
 
 # update vote of current user for restaurant
-# after 11:00 AM throw IllegalRequestDataException: Voting time expired at 11:00 AM
+# after 11:00 AM throw: Voting time expired at 11:00 AM
 PUT http://localhost:8080/voting/auth/votes/100003
 Authorization: Basic user@gmail.com password
 Content-Type: application/json

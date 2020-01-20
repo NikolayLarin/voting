@@ -1,8 +1,8 @@
 package com.voting.service;
 
+import com.voting.AuthorizedUser;
 import com.voting.model.User;
 import com.voting.repository.user.UserRepository;
-import com.voting.web.AuthorizedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;

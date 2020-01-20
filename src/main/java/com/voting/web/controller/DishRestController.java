@@ -1,4 +1,4 @@
-package com.voting.web;
+package com.voting.web.controller;
 
 import com.voting.model.Dish;
 import com.voting.service.DishService;
@@ -36,7 +36,6 @@ public class DishRestController {
         log.info("getTodayMenus");
         return service.getTodayMenus();
     }
-
 
     @GetMapping("/{restaurantId}")
     public List<Dish> getMenuOnDate(@RequestParam @NonNull LocalDate date,
