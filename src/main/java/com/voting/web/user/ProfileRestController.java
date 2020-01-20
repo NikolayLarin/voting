@@ -25,7 +25,6 @@ import static com.voting.util.ValidationUtil.assureIdConsistent;
 import static com.voting.util.ValidationUtil.checkNew;
 import static com.voting.web.SecurityUtil.authUserId;
 
-
 @RestController
 @RequestMapping(ProfileRestController.REST_URL)
 public class ProfileRestController {

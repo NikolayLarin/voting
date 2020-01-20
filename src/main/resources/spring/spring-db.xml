@@ -21,14 +21,25 @@
 
     <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
-    <!--no pooling-->
+    <!--https://tomcat.apache.org/tomcat-9.0-doc/jdbc-pool.html-->
     <bean id="dataSource"
-          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-          p:driverClassName="org.hsqldb.jdbcDriver"
+          class="org.apache.tomcat.jdbc.pool.DataSource"
+          p:driverClassName="${database.driverClassName}"
           p:url="${database.url}"
           p:username="${database.username}"
-          p:password="${database.password}"/>
-
+          p:password="${database.password}"
+          p:validationQuery="SELECT 1"
+          p:maxActive="10"
+          p:minIdle="2"
+          p:maxWait="20000"
+          p:initialSize="2"
+          p:maxIdle="5"
+          p:removeAbandoned="true"
+          p:testWhileIdle="true"
+    />
+    <!--tests failed:-->
+    <!--p:testOnBorrow="true"-->
+    <!--p:testOnConnect="true"-->
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="dataSource"
@@ -36,18 +47,22 @@
 
         <property name="jpaPropertyMap">
             <map>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}"
+                       value="${hibernate.format_sql}"/>
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}"
                        value="${hibernate.use_sql_comments}"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).JPA_PROXY_COMPLIANCE}" value="false"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).JPA_PROXY_COMPLIANCE}"
+                       value="false"/>
 
                 <!--https://github.com/hibernate/hibernate-orm/blob/master/documentation/src/main/asciidoc/userguide/chapters/caching/Caching.adoc#caching-provider-jcache-->
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).CACHE_REGION_FACTORY}"
                        value="org.hibernate.cache.jcache.internal.JCacheRegionFactory"/>
                 <entry key="#{T(org.hibernate.cache.jcache.ConfigSettings).PROVIDER}"
                        value="org.ehcache.jsr107.EhcacheCachingProvider"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SECOND_LEVEL_CACHE}" value="true"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_QUERY_CACHE}" value="false"/> <!--default-->
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SECOND_LEVEL_CACHE}"
+                       value="true"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_QUERY_CACHE}"
+                       value="false"/> <!--default-->
             </map>
         </property>
 

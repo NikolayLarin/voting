@@ -32,7 +32,7 @@ Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
-  "name": "New restaurant"
+  "name": "New Restaurant updated"
 }
 
 ###

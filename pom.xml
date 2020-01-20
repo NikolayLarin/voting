@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>Lunch Voting System</name>
-    <!--    <url>http://typehere.com/</url>-->
+    <!--<url>http://typehere.com/</url>-->
 
     <properties>
         <java.version>11</java.version>
@@ -26,7 +26,6 @@
         <slf4j.version>1.7.28</slf4j.version>
 
         <!--DB-->
-        <postgresql.version>42.2.8</postgresql.version>
         <hsqldb.version>2.5.0</hsqldb.version>
 
         <!--    Tests  -->
@@ -114,6 +113,11 @@
             <artifactId>hsqldb</artifactId>
             <version>${hsqldb.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
 
         <!-- Spring -->
         <dependency>
@@ -135,11 +139,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -195,13 +194,6 @@
             <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -224,13 +216,13 @@
             <version>${jackson-json.version}</version>
         </dependency>
 
+        <!--    Tests  -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
@@ -243,7 +235,6 @@
             <version>${json-path.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
