@@ -2,7 +2,6 @@ package com.voting.web.controller;
 
 import com.voting.model.User;
 import com.voting.repository.user.UserRepository;
-import com.voting.util.exception.IllegalRequestDataException;
 import com.voting.web.ExceptionInfoHandler;
 import com.voting.web.SecurityUtil;
 import org.springframework.stereotype.Component;
@@ -32,8 +31,7 @@ public class UniqueMailValidator implements org.springframework.validation.Valid
         }
         User dbUser = repository.getByEmail(user.getEmail().toLowerCase());
         if (dbUser != null && dbUser.getId() != null && !dbUser.getId().equals(user.getId())) {
-            errors.rejectValue("email", ExceptionInfoHandler.DUPLICATE_EMAIL);
-            throw new IllegalRequestDataException(ExceptionInfoHandler.DUPLICATE_EMAIL);
+            errors.rejectValue("email", ExceptionInfoHandler.DUPLICATE_EMAIL_CODE);
         }
     }
 }
