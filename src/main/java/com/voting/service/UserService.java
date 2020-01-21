@@ -27,8 +27,17 @@ public class UserService implements UserDetailsService {
         this.repository = repository;
     }
 
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User with " + email + " not found");
+        }
+        return new AuthorizedUser(user);
+    }
+
     public User create(User user) {
-        return save(user);
+        return prepareAndSave(user);
     }
 
     public void delete(int id) {
@@ -49,20 +58,12 @@ public class UserService implements UserDetailsService {
     }
 
     public void update(User user) {
-        save(user);
+        prepareAndSave(user);
     }
 
-    private User save(User user) {
+    private User prepareAndSave(User user) {
+        user.setEmail(user.getEmail().toLowerCase());
         Assert.notNull(user, "user must not be null");
         return checkNotFoundWithId(repository.save(user), user.getId());
-    }
-
-    @Override
-    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repository.getByEmail(email.toLowerCase());
-        if (user == null) {
-            throw new UsernameNotFoundException("User with " + email + " not found");
-        }
-        return new AuthorizedUser(user);
     }
 }

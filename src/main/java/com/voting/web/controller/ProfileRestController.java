@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 import static com.voting.util.ValidationUtil.assureIdConsistent;
@@ -34,9 +37,17 @@ public class ProfileRestController {
 
     private final UserService service;
 
+    private final UniqueMailValidator emailValidator;
+
     @Autowired
-    public ProfileRestController(UserService service) {
+    public ProfileRestController(UserService service, UniqueMailValidator emailValidator) {
         this.service = service;
+        this.emailValidator = emailValidator;
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(emailValidator);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,7 +64,7 @@ public class ProfileRestController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<User> register(@RequestBody User user) {
+    public ResponseEntity<User> register(@Valid @RequestBody User user) {
         log.info("create {}", user);
         checkNew(user);
         User created = service.create(user);
@@ -72,7 +83,7 @@ public class ProfileRestController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user) {
+    public void update(@Valid @RequestBody User user) {
         log.info("update {} with id={}", user, authUserId());
         assureIdConsistent(user, authUserId());
         service.update(user);

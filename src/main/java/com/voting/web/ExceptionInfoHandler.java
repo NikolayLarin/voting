@@ -33,6 +33,9 @@ import static com.voting.util.exception.ErrorType.VALIDATION_ERROR;
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
+    public static final String DUPLICATE_EMAIL = "User with this email already exists";
+
+
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY) //422
     @ExceptionHandler(NotFoundException.class)
