@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.voting.util.exception.ErrorType.APP_ERROR;
@@ -36,7 +38,15 @@ import static com.voting.util.exception.ErrorType.VALIDATION_ERROR;
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
-    public static final String DUPLICATE_EMAIL_CODE = "error.duplicate.mail";
+    public static final String DUPLICATE_USER_EMAIL_CODE = "exception.user.duplicateEmail";
+    public static final String DUPLICATE_RESTAURANT_NAME_CODE = "exception.restaurant.duplicateName";
+    public static final String DUPLICATE_DISH_NAME_ON_DATE_CODE = "exception.dish.duplicateNameOnDate";
+    public static final String DUPLICATE_VOTE_ON_DATE_CODE = "exception.vote.duplicate";
+
+    public static final Map<String, String> UNIQUE_I18_EXCEPTION_MAP = Map.of(
+            "restaurants_unique_name_idx", DUPLICATE_RESTAURANT_NAME_CODE,
+            "dishes_unique_restaurant_date_name_idx", DUPLICATE_DISH_NAME_ON_DATE_CODE,
+            "votes_unique_date_user_idx", DUPLICATE_VOTE_ON_DATE_CODE);
 
     private final MessageUtil messageUtil;
 
@@ -54,13 +64,25 @@ public class ExceptionInfoHandler {
 
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+    public ErrorInfo conflict(HttpServletRequest request, DataIntegrityViolationException e) {
+        String rootMessage = ValidationUtil.getRootCause(e).getMessage();
+        if (rootMessage != null) {
+            String rootMessageLowerCase = rootMessage.toLowerCase();
+            Optional<Map.Entry<String, String>> exceptionEntry = UNIQUE_I18_EXCEPTION_MAP.entrySet()
+                    .stream()
+                    .filter(entry -> rootMessageLowerCase.contains(entry.getKey()))
+                    .findFirst();
+            if (exceptionEntry.isPresent()) {
+                return logAndGetErrorInfo(request, e, false, VALIDATION_ERROR,
+                        messageUtil.getErrorMessage(exceptionEntry.get().getValue()));
+            }
+        }
+        return logAndGetErrorInfo(request, e, true, DATA_ERROR);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    public ErrorInfo bindValidationError(HttpServletRequest req, Exception e) {
+    public ErrorInfo bindValidationError(HttpServletRequest request, Exception e) {
         BindingResult result = e instanceof BindException ?
                 ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
 
@@ -75,34 +97,37 @@ public class ExceptionInfoHandler {
                                 .toArray(String[]::new)))
                 .toArray(String[]::new);
 
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details);
+        return logAndGetErrorInfo(request, e, false, VALIDATION_ERROR, details);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
-    public ErrorInfo illegalRequestDataError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, VALIDATION_ERROR);
+    @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class})
+    public ErrorInfo illegalRequestDataError(HttpServletRequest request, Exception e) {
+        return logAndGetErrorInfo(request, e, true, VALIDATION_ERROR);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ErrorInfo handleError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, APP_ERROR);
+    public ErrorInfo handleError(HttpServletRequest request, Exception e) {
+        return logAndGetErrorInfo(request, e, true, APP_ERROR);
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... details) {
-        Throwable rootCause = logAndGetRootCause(log, req, e, logException, errorType);
-        return new ErrorInfo(req.getRequestURL(), errorType, messageUtil.getErrorMessage(errorType.getErrorCode()),
+    private ErrorInfo logAndGetErrorInfo(HttpServletRequest request, Exception e, boolean logException,
+                                         ErrorType errorType, String... details) {
+        Throwable rootCause = logAndGetRootCause(log, request, e, logException, errorType);
+        return new ErrorInfo(request.getRequestURL(), errorType, messageUtil.getErrorMessage(errorType.getErrorCode()),
                 details.length != 0 ? details : new String[]{ValidationUtil.getMessage(rootCause)});
     }
 
-    private static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+    private static Throwable logAndGetRootCause(Logger log, HttpServletRequest request, Exception e,
+                                                boolean logException, ErrorType errorType) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
-            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+            log.error(errorType + " at request " + request.getRequestURL(), rootCause);
         } else {
-            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+            log.warn("{} at request  {}: {}", errorType, request.getRequestURL(), rootCause.toString());
         }
         return rootCause;
     }

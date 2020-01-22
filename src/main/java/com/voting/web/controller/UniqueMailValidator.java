@@ -4,6 +4,7 @@ import com.voting.model.User;
 import com.voting.repository.user.UserRepository;
 import com.voting.web.ExceptionInfoHandler;
 import com.voting.web.SecurityUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -14,6 +15,7 @@ public class UniqueMailValidator implements org.springframework.validation.Valid
 
     private final UserRepository repository;
 
+    @Autowired
     public UniqueMailValidator(UserRepository repository) {
         this.repository = repository;
     }
@@ -31,7 +33,7 @@ public class UniqueMailValidator implements org.springframework.validation.Valid
         }
         User dbUser = repository.getByEmail(user.getEmail().toLowerCase());
         if (dbUser != null && dbUser.getId() != null && !dbUser.getId().equals(user.getId())) {
-            errors.rejectValue("email", ExceptionInfoHandler.DUPLICATE_EMAIL_CODE);
+            errors.rejectValue("email", ExceptionInfoHandler.DUPLICATE_USER_EMAIL_CODE);
         }
     }
 }

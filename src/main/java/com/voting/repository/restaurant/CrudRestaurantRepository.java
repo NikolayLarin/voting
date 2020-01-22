@@ -18,4 +18,6 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
     @Override
     @Transactional
     Restaurant save(Restaurant item);
+
+    Restaurant getByName(String name);
 }
