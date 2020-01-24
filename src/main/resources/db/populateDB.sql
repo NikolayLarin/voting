@@ -19,7 +19,7 @@ VALUES ('Restaurant_1'),
        ('Restaurant_2'),
        ('Restaurant_3');
 
-INSERT INTO dishes (date, name, price, restaurantId)
+INSERT INTO dishes (date, name, price, restaurant_id)
 VALUES ('2020-01-10', 'Борщ', 2500, 100002),
        ('2020-01-10', 'Каша', 2000, 100002),
        ('2020-01-10', 'Котлета', 3500, 100003),
@@ -33,7 +33,7 @@ VALUES ('2020-01-10', 'Борщ', 2500, 100002),
        ('2020-01-11', 'Каша', 2100, 100004),
        ('2020-01-11', 'Котлета', 3400, 100004);
 
-INSERT INTO dishes (name, price, restaurantId)
+INSERT INTO dishes (name, price, restaurant_id)
 VALUES ('Борщ', 2500, 100002),
        ('Каша', 2000, 100002),
        ('Котлета', 3500, 100002),

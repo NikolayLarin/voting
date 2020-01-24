@@ -1,12 +1,15 @@
 package com.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +19,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames =
-        {"restaurantId", "date", "name"}, name = "dishes_unique_restaurant_date_name_idx")})
+        {"restaurant_id", "date", "name"}, name = "dishes_unique_restaurant_date_name_idx")})
 public class Dish extends AbstractBaseEntity {
 
     @Column(name = "date", nullable = false)
@@ -33,25 +36,25 @@ public class Dish extends AbstractBaseEntity {
     @Range(min = 1)
     private Integer price;
 
-    // https://stackoverflow.com/questions/6311776/hibernate-foreign-keys-instead-of-entities
-    @JoinColumn(name = "restaurantId", nullable = false, updatable = false, insertable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private Integer restaurantId;
+    @JsonIgnore
+    private Restaurant restaurant;
 
     public Dish() {
     }
 
     public Dish(Dish d) {
-        this(d.getId(), d.getDate(), d.getName(), d.getPrice(), d.getRestaurantId());
+        this(d.getId(), d.getDate(), d.getName(), d.getPrice());
     }
 
-    public Dish(Integer id, LocalDate date, String name, Integer price, Integer restaurantId) {
+    public Dish(Integer id, LocalDate date, String name, Integer price) {
         super(id);
         this.date = date;
         this.name = name;
         this.price = price;
-        this.restaurantId = restaurantId;
     }
 
     public LocalDate getDate() {
@@ -78,18 +81,19 @@ public class Dish extends AbstractBaseEntity {
         this.price = price;
     }
 
-    public Integer getRestaurantId() {
-        return restaurantId;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantId(Integer restaurant_id) {
-        this.restaurantId = restaurant_id;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override
     public String toString() {
         return "Dish{" +
                 "id=" + id +
+                ", date=" + date +
                 ", name=" + name +
                 ", price=" + price +
                 '}';
