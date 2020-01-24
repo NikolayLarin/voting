@@ -1,5 +1,6 @@
 package com.voting.service;
 
+import com.voting.DishTestData;
 import com.voting.RestaurantTestData;
 import com.voting.model.Restaurant;
 import com.voting.util.exception.NotFoundException;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDate;
+import java.util.List;
 
 import static com.voting.RestaurantTestData.RESTAURANTS;
 import static com.voting.RestaurantTestData.RESTAURANT_1;
@@ -58,7 +61,18 @@ class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void getAll() {
-        assertMatch(service.getAll(), RESTAURANTS);
+        final List<Restaurant> all = service.getAll();
+        assertMatch(all, RESTAURANTS);
+    }
+
+    @Test
+    void getAllWithTodayMenu() {
+        final List<Restaurant> all = service.getAllWithTodayMenu();
+        assertMatch(all, RESTAURANTS);
+        all.forEach(restaurant ->
+                DishTestData.assertMatch(
+                        restaurant.getDishes(),
+                        RestaurantTestData.getDishesOnDate(restaurant.getId(), LocalDate.now())));
     }
 
     @Test

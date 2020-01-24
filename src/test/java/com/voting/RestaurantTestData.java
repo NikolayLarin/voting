@@ -1,8 +1,11 @@
 package com.voting;
 
+import com.voting.model.Dish;
 import com.voting.model.Restaurant;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.voting.model.AbstractBaseEntity.START_SEQ;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,8 +31,20 @@ public class RestaurantTestData {
         return updated;
     }
 
+    public static List<Dish> getDishesOnDate(int restaurantId, LocalDate date) {
+        switch (restaurantId) {
+            case (RESTAURANT_1_ID):
+                return getOnDate(DishTestData.RESTAURANT_1_DISHES, date);
+            case (RESTAURANT_2_ID):
+                return getOnDate(DishTestData.RESTAURANT_2_DISHES, date);
+            case (RESTAURANT_3_ID):
+                return getOnDate(DishTestData.RESTAURANT_3_DISHES, date);
+        }
+        return null;
+    }
+
     public static void assertMatch(Restaurant actual, Restaurant expected) {
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "dishes");
     }
 
     public static void assertMatch(Iterable<Restaurant> actual, Restaurant... expected) {
@@ -37,6 +52,13 @@ public class RestaurantTestData {
     }
 
     public static void assertMatch(Iterable<Restaurant> actual, Iterable<Restaurant> expected) {
-        assertThat(actual).usingDefaultElementComparator().isEqualTo(expected);
+        assertThat(actual).usingElementComparatorIgnoringFields("dishes").isEqualTo(expected);
+    }
+
+    private static List<Dish> getOnDate(List<Dish> dishes, LocalDate date) {
+        return dishes
+                .stream()
+                .filter(dish -> dish.getDate().isEqual(date))
+                .collect(Collectors.toList());
     }
 }

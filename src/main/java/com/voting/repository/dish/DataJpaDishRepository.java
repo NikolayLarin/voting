@@ -1,61 +1,66 @@
 package com.voting.repository.dish;
 
 import com.voting.model.Dish;
+import com.voting.repository.restaurant.CrudRestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public class DataJpaDishRepository implements DishRepository {
+public class DataJpaDishRepository {
 
-    private final CrudDishRepository crudRepository;
+    private final CrudDishRepository dishRepository;
+    private final CrudRestaurantRepository restaurantRepository;
 
     @Autowired
-    public DataJpaDishRepository(CrudDishRepository crudRepository) {
-        this.crudRepository = crudRepository;
+    public DataJpaDishRepository(CrudDishRepository dishRepository, CrudRestaurantRepository restaurantRepository) {
+        this.dishRepository = dishRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
-    @Override
+    @Transactional
+    // null if updated dish do not belong to restaurant
     public Dish save(Dish dish, int restaurantId) {
         if (!dish.isNew() && get(dish.getId(), restaurantId) == null) {
             return null;
         }
-        dish.setRestaurantId(restaurantId);
-        return crudRepository.save(dish);
+        dish.setRestaurant(restaurantRepository.getOne(restaurantId));
+        return dishRepository.save(dish);
     }
 
-    @Override
+    // false if dish do not belong to restaurant
     public boolean delete(int id, int restaurantId) {
-        return crudRepository.delete(id, restaurantId) != 0;
+        return dishRepository.delete(id, restaurantId) != 0;
     }
 
-    @Override
+    // null if dish do not belong to restaurant
     public Dish get(int id, int restaurantId) {
-        return crudRepository
+        return dishRepository
                 .findById(id)
-                .filter(dish -> dish.getRestaurantId() == restaurantId)
+                .filter(dish -> dish.getRestaurant().getId() == restaurantId)
                 .orElse(null);
     }
 
-    @Override
+    // ORDERED by date desc, price asc
     public List<Dish> getAll(int restaurantId) {
-        return crudRepository.getAll(restaurantId);
+        return dishRepository.getAll(restaurantId);
     }
 
-    @Override
+    // ORDERED by price asc
     public List<Dish> getMenuOnDate(LocalDate date, int restaurantId) {
-        return crudRepository.getMenuOnDate(date, restaurantId);
+        return dishRepository.getMenuOnDate(date, restaurantId);
     }
 
-    @Override
+    // ORDERED by price asc
     public List<Dish> getDayMenus(LocalDate date) {
-        return crudRepository.getDayMenus(date);
+        return dishRepository.getDayMenus(date);
     }
 
-    @Override
+    // ORDERED by date desc, price asc
     public List<Dish> getBetweenInclusive(LocalDate startDate, LocalDate endDate, int restaurantId) {
-        return crudRepository.getBetweenInclusive(startDate, endDate, restaurantId);
+        return dishRepository.getBetweenInclusive(startDate, endDate, restaurantId);
     }
 }

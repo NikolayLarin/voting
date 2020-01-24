@@ -5,16 +5,14 @@ import com.voting.repository.restaurant.CrudRestaurantRepository;
 import com.voting.repository.user.CrudUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
-public class DataJpaVoteRepository implements VoteRepository {
-
+public class DataJpaVoteRepository {
     private final CrudVoteRepository crudVoteRepository;
-
     private final CrudUserRepository crudUserRepository;
-
     private final CrudRestaurantRepository crudRestaurantRepository;
 
     @Autowired
@@ -26,7 +24,8 @@ public class DataJpaVoteRepository implements VoteRepository {
         this.crudRestaurantRepository = crudRestaurantRepository;
     }
 
-    @Override
+    @Transactional
+    // null if updated vote do not belong to user
     public Vote save(Vote vote, int userId, int restaurantId) {
         if (!vote.isNew() && get(vote.getId(), userId) == null) {
             return null;
@@ -36,12 +35,12 @@ public class DataJpaVoteRepository implements VoteRepository {
         return crudVoteRepository.save(vote);
     }
 
-    @Override
+    // false if vote do not belong to user
     public boolean delete(int id, int userId) {
         return crudVoteRepository.delete(id, userId) != 0;
     }
 
-    @Override
+    // null if vote do not belong to user
     public Vote get(int id, int userId) {
         return crudVoteRepository
                 .findById(id)
@@ -49,7 +48,7 @@ public class DataJpaVoteRepository implements VoteRepository {
                 .orElse(null);
     }
 
-    @Override
+    // ORDERED by date desc
     public List<Vote> getAll(int userId) {
         return crudVoteRepository.getAll(userId);
     }

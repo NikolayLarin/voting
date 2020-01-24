@@ -1,7 +1,7 @@
 package com.voting.web.controller;
 
 import com.voting.model.Restaurant;
-import com.voting.repository.restaurant.RestaurantRepository;
+import com.voting.repository.restaurant.DataJpaRestaurantRepository;
 import com.voting.web.ExceptionInfoHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,10 @@ import org.springframework.validation.Errors;
 @Component
 public class UniqueRestaurantValidator implements org.springframework.validation.Validator {
 
-    private final RestaurantRepository repository;
+    private final DataJpaRestaurantRepository repository;
 
     @Autowired
-    public UniqueRestaurantValidator(RestaurantRepository repository) {
+    public UniqueRestaurantValidator(DataJpaRestaurantRepository repository) {
         this.repository = repository;
     }
 

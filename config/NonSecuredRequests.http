@@ -51,6 +51,11 @@ GET http://localhost:8080/voting/restaurants
 
 ###
 
+#getAllTodayMenus returns all restaurants with today menu
+GET http://localhost:8080/voting/restaurants/menus
+
+###
+
 #get returns restaurant
 GET http://localhost:8080/voting/restaurants/100002
 

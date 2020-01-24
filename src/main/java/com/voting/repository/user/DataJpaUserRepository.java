@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class DataJpaUserRepository implements UserRepository {
+public class DataJpaUserRepository {
     private static final Sort SORT_BY_EMAIL = Sort.by(Sort.Direction.ASC, "email");
 
     private final CrudUserRepository crudRepository;
@@ -18,7 +18,7 @@ public class DataJpaUserRepository implements UserRepository {
         this.crudRepository = crudRepository;
     }
 
-    @Override
+    // null if not found, when updated
     public User save(User user) {
         if (!user.isNew() && get(user.getId()) == null) {
             return null;
@@ -26,22 +26,22 @@ public class DataJpaUserRepository implements UserRepository {
         return crudRepository.save(user);
     }
 
-    @Override
+    // false if not found
     public boolean delete(int id) {
         return crudRepository.delete(id) != 0;
     }
 
-    @Override
+    // null if not found
     public User get(int id) {
         return crudRepository.findById(id).orElse(null);
     }
 
-    @Override
+    // null if not found
     public User getByEmail(String email) {
         return crudRepository.getByEmail(email);
     }
 
-    @Override
+    // ORDERED by email
     public List<User> getAll() {
         return crudRepository.findAll(SORT_BY_EMAIL);
     }

@@ -1,7 +1,7 @@
 package com.voting.web.controller;
 
 import com.voting.model.User;
-import com.voting.repository.user.UserRepository;
+import com.voting.repository.user.DataJpaUserRepository;
 import com.voting.web.ExceptionInfoHandler;
 import com.voting.web.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import static com.voting.web.SecurityUtil.authUserId;
 @Component
 public class UniqueMailValidator implements org.springframework.validation.Validator {
 
-    private final UserRepository repository;
+    private final DataJpaUserRepository repository;
 
     @Autowired
-    public UniqueMailValidator(UserRepository repository) {
+    public UniqueMailValidator(DataJpaUserRepository repository) {
         this.repository = repository;
     }
 

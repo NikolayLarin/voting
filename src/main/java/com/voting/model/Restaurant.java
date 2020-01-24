@@ -2,6 +2,7 @@ package com.voting.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +23,7 @@ public class Restaurant extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.PERSIST)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Dish> dishes;
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
+import java.util.List;
 
 import static com.voting.DishTestData.DATE_2020_01_10;
 import static com.voting.DishTestData.DATE_2020_01_11;
@@ -87,13 +88,15 @@ class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getMenuOnDate() {
-        assertMatch(service.getMenuOnDate(
-                LocalDate.of(2020, 1, 10), RESTAURANT_1_ID), RESTAURANT_1_MENU_ON_2020_01_10);
+        final List<Dish> menuOnDate = service.getMenuOnDate(
+                LocalDate.of(2020, 1, 10), RESTAURANT_1_ID);
+        assertMatch(menuOnDate, RESTAURANT_1_MENU_ON_2020_01_10);
     }
 
     @Test
     void getTodayMenus() {
-        assertMatch(service.getTodayMenus(), MENUS_ON_NOW);
+        final List<Dish> todayMenus = service.getTodayMenus();
+        assertMatch(todayMenus, MENUS_ON_NOW);
 
     }
 
@@ -127,19 +130,23 @@ class DishServiceTest extends AbstractServiceTest {
     @Test
     void createWithException() {
         validateRootCause(() -> service.create(
-                new Dish(null, null, "dishName", 500, RESTAURANT_1_ID), RESTAURANT_1_ID),
+                new Dish(null, null, "dishName", 500), RESTAURANT_1_ID),
+//                new Dish(null, null, "dishName", 500, RESTAURANT_1_ID), RESTAURANT_1_ID),
                 ConstraintViolationException.class);
 
         validateRootCause(() -> service.create(
-                new Dish(null, LocalDate.now(), "  ", 500, RESTAURANT_1_ID), RESTAURANT_1_ID),
+                new Dish(null, LocalDate.now(), "  ", 500), RESTAURANT_1_ID),
+//                new Dish(null, LocalDate.now(), "  ", 500, RESTAURANT_1_ID), RESTAURANT_1_ID),
                 ConstraintViolationException.class);
 
         validateRootCause(() -> service.create(
-                new Dish(null, LocalDate.now(), "o", 500, RESTAURANT_1_ID), RESTAURANT_1_ID),
+                new Dish(null, LocalDate.now(), "o", 500), RESTAURANT_1_ID),
+//                new Dish(null, LocalDate.now(), "o", 500, RESTAURANT_1_ID), RESTAURANT_1_ID),
                 ConstraintViolationException.class);
 
         validateRootCause(() -> service.create(
-                new Dish(null, LocalDate.now(), "dishName", 0, RESTAURANT_1_ID), RESTAURANT_1_ID),
+                new Dish(null, LocalDate.now(), "dishName", 0), RESTAURANT_1_ID),
+//                new Dish(null, LocalDate.now(), "dishName", 0, RESTAURANT_1_ID), RESTAURANT_1_ID),
                 ConstraintViolationException.class);
     }
 }

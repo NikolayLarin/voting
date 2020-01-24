@@ -2,7 +2,7 @@ package com.voting.service;
 
 import com.voting.AuthorizedUser;
 import com.voting.model.User;
-import com.voting.repository.user.UserRepository;
+import com.voting.repository.user.DataJpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -20,10 +20,10 @@ import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
 
-    private final UserRepository repository;
+    private final DataJpaUserRepository repository;
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(DataJpaUserRepository repository) {
         this.repository = repository;
     }
 

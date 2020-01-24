@@ -1,7 +1,6 @@
 package com.voting.service;
 
 import com.voting.UserTestData;
-import com.voting.model.Restaurant;
 import com.voting.model.Role;
 import com.voting.model.User;
 import com.voting.util.exception.NotFoundException;
@@ -34,7 +33,8 @@ public class UserServiceTest extends AbstractServiceTest {
         Integer newId = created.getId();
         newUser.setId(newId);
         assertMatch(created, newUser);
-        assertMatch(service.get(newId), newUser);
+        final User actual = service.get(newId);
+        assertMatch(actual, newUser);
     }
 
     @Test

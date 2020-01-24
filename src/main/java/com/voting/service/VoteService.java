@@ -1,7 +1,7 @@
 package com.voting.service;
 
 import com.voting.model.Vote;
-import com.voting.repository.vote.VoteRepository;
+import com.voting.repository.vote.DataJpaVoteRepository;
 import com.voting.util.exception.IllegalRequestDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 @Service
 public class VoteService {
 
-    private final VoteRepository repository;
+    private final DataJpaVoteRepository repository;
 
     @Autowired
-    public VoteService(VoteRepository repository) {
+    public VoteService(DataJpaVoteRepository repository) {
         this.repository = repository;
     }
 

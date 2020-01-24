@@ -1,7 +1,7 @@
 package com.voting.service;
 
 import com.voting.model.Dish;
-import com.voting.repository.dish.DishRepository;
+import com.voting.repository.dish.DataJpaDishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -16,10 +16,10 @@ import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 @Service
 public class DishService {
 
-    private final DishRepository repository;
+    private final DataJpaDishRepository repository;
 
     @Autowired
-    public DishService(DishRepository repository) {
+    public DishService(DataJpaDishRepository repository) {
         this.repository = repository;
     }
 
