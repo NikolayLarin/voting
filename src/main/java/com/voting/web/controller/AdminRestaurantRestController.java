@@ -1,8 +1,6 @@
 package com.voting.web.controller;
 
-import com.voting.model.Dish;
 import com.voting.model.Restaurant;
-import com.voting.service.DishService;
 import com.voting.service.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,23 +27,20 @@ import static com.voting.util.ValidationUtil.assureIdConsistent;
 import static com.voting.util.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminRestController {
+@RequestMapping(value = AdminRestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdminRestaurantRestController {
     static final String REST_URL = "/auth/admin/restaurants";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final RestaurantService restaurantService;
-    private final DishService dishService;
 
     private final UniqueRestaurantValidator restaurantValidator;
 
     @Autowired
-    public AdminRestController(RestaurantService restaurantService,
-                               DishService dishService,
-                               UniqueRestaurantValidator restaurantValidator) {
+    public AdminRestaurantRestController(RestaurantService restaurantService,
+                                         UniqueRestaurantValidator restaurantValidator) {
         this.restaurantService = restaurantService;
-        this.dishService = dishService;
         this.restaurantValidator = restaurantValidator;
     }
 
@@ -65,47 +60,19 @@ public class AdminRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PostMapping(value = "/{restaurantId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish, @PathVariable int restaurantId) {
-        log.info("create {} for restaurant with id={}", dish, restaurantId);
-        checkNew(dish);
-        Dish created = dishService.create(dish, restaurantId);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/" + restaurantId + "/dishes" + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
-    }
-
-    @DeleteMapping("/{restaurantId}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int restaurantId) {
-        log.info("delete restaurant with id={}", restaurantId);
-        restaurantService.delete(restaurantId);
+    public void delete(@PathVariable int id) {
+        log.info("delete restaurant with id={}", id);
+        restaurantService.delete(id);
     }
 
-    @DeleteMapping("/{restaurantId}/dishes/{dishId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int restaurantId, @PathVariable int dishId) {
-        log.info("delete dish {} of restaurant with id={}", dishId, restaurantId);
-        dishService.delete(dishId, restaurantId);
-    }
-
-    @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant,
-                       @PathVariable int restaurantId) {
-        assureIdConsistent(restaurant, restaurantId);
-        log.info("update {} with id={}", restaurant, restaurantId);
+                       @PathVariable int id) {
+        assureIdConsistent(restaurant, id);
+        log.info("update {} with id={}", restaurant, id);
         restaurantService.update(restaurant);
-    }
-
-    @PutMapping(value = "/{restaurantId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Dish dish,
-                       @PathVariable int restaurantId,
-                       @PathVariable int dishId) {
-        assureIdConsistent(dish, dishId);
-        log.info("update {} with id={} of restaurant with id={}", dish, dishId, restaurantId);
-        dishService.update(dish, restaurantId);
     }
 }

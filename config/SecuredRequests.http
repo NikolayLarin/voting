@@ -12,8 +12,18 @@
 ################         to save entities id's          ################
 
 
-################           AdminRestController          ################
+################      AdminRestaurantRestController     ################
 # createWithLocation restaurant
+POST http://localhost:8080/voting/auth/admin/restaurants
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
+  "name": "Н"
+}
+
+###
+
 POST http://localhost:8080/voting/auth/admin/restaurants
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -35,25 +45,56 @@ Content-Type: application/json
 
 ###
 
-# createWithLocation dish for restaurant
-POST http://localhost:8080/voting/auth/admin/restaurants/100030/dishes
+# update restaurant
+PUT http://localhost:8080/voting/auth/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
-  "date": "2020-01-17",
+  "name": "New name"
+}
+
+###
+
+#delete restaurant
+DELETE http://localhost:8080/voting/auth/admin/restaurants/1000030
+Authorization: Basic admin@gmail.com admin
+
+###
+###############################  end  ##################################
+
+################         AdminDishRestController        ################
+
+# createWithLocation dish for restaurant
+POST http://localhost:8080/voting/auth/admin/restaurants/100002/dishes
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
   "name": "New Dish",
   "price": 2200
 }
 
 ###
-# update dish for restaurant
-PUT http://localhost:8080/voting/auth/admin/restaurants/100030/dishes/100031
+
+# createWithLocation dish for restaurant
+POST http://localhost:8080/voting/auth/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
 {
-  "date": "2020-01-17",
+  "name": "N",
+  "price": 2200
+}
+
+###
+
+# update dish for restaurant
+PUT http://localhost:8080/voting/auth/admin/restaurants/100002/dishes/100031
+Authorization: Basic admin@gmail.com admin
+Content-Type: application/json
+
+{
   "name": "New Dish Updated",
   "price": 2200
 }
@@ -61,13 +102,7 @@ Content-Type: application/json
 ###
 
 #delete dish
-DELETE http://localhost:8080/voting/auth/admin/restaurants/100030/dishes/100031
-Authorization: Basic admin@gmail.com admin
-
-###
-
-#delete restaurant
-DELETE http://localhost:8080/voting/auth/admin/restaurants/100030
+DELETE http://localhost:8080/voting/auth/admin/restaurants/100002/dishes/100031
 Authorization: Basic admin@gmail.com admin
 
 ###

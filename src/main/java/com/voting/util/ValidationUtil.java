@@ -1,8 +1,11 @@
 package com.voting.util;
 
-import com.voting.model.AbstractBaseEntity;
+import com.voting.HasId;
+import com.voting.to.DishTo;
 import com.voting.util.exception.IllegalRequestDataException;
 import com.voting.util.exception.NotFoundException;
+
+import java.time.LocalDate;
 
 public class ValidationUtil {
 
@@ -28,13 +31,24 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkNew(AbstractBaseEntity entity) {
+    public static void checkNew(HasId entity) {
         if (!entity.isNew()) {
             throw new IllegalRequestDataException(entity + " must be new (id=null)");
         }
     }
 
-    public static void assureIdConsistent(AbstractBaseEntity entity, int id) {
+
+    public static DishTo checkDate(DishTo dishTo) {
+        final LocalDate date = dishTo.getDate();
+        if (date == null) {
+            dishTo.setDate(LocalDate.now());
+        } else if (!date.isEqual(LocalDate.now())) {
+            throw new IllegalRequestDataException("Dish date=" + date + " must be today: " + LocalDate.now());
+        }
+        return dishTo;
+    }
+
+    public static void assureIdConsistent(HasId entity, int id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (entity.isNew()) {
             entity.setId(id);

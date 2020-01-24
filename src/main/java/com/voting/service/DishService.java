@@ -2,6 +2,7 @@ package com.voting.service;
 
 import com.voting.model.Dish;
 import com.voting.repository.dish.DataJpaDishRepository;
+import com.voting.to.DishTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -11,6 +12,8 @@ import java.util.List;
 
 import static com.voting.util.DateTimeUtil.getEndExclusive;
 import static com.voting.util.DateTimeUtil.getStartInclusive;
+import static com.voting.util.ToUtils.createFromTo;
+import static com.voting.util.ValidationUtil.checkDate;
 import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -21,6 +24,10 @@ public class DishService {
     @Autowired
     public DishService(DataJpaDishRepository repository) {
         this.repository = repository;
+    }
+
+    public Dish create(DishTo dishTo, int restaurantId) {
+        return save(createFromTo(checkDate(dishTo)), restaurantId);
     }
 
     public Dish create(Dish dish, int restaurantId) {
@@ -52,6 +59,10 @@ public class DishService {
                 getStartInclusive(startDate).toLocalDate(),
                 getEndExclusive(endDate).toLocalDate(),
                 restaurantId);
+    }
+
+    public void update(DishTo dishTo, int restaurantId) {
+        update(createFromTo(checkDate(dishTo)), restaurantId);
     }
 
     public void update(Dish dish, int restaurantId) {
