@@ -1,13 +1,15 @@
 package com.voting.service;
 
-import com.voting.VoteTestData;
 import com.voting.model.Vote;
 import com.voting.util.exception.IllegalRequestDataException;
 import com.voting.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+
 import static com.voting.RestaurantTestData.RESTAURANT_1_ID;
+import static com.voting.RestaurantTestData.RESTAURANT_2;
 import static com.voting.RestaurantTestData.RESTAURANT_2_ID;
 import static com.voting.UserTestData.ADMIN_ID;
 import static com.voting.UserTestData.USER_ID;
@@ -16,8 +18,8 @@ import static com.voting.VoteTestData.USER_VOTES;
 import static com.voting.VoteTestData.VOTE_1_ID;
 import static com.voting.VoteTestData.VOTE_1_USER_RESTAURANT_1;
 import static com.voting.VoteTestData.assertMatch;
-import static com.voting.VoteTestData.getUpdated;
-import static com.voting.util.DateTimeUtil.isVotingTimeExpired;
+import static com.voting.VoteTestData.getNew;
+import static com.voting.util.ValidationUtil.isVoteChangeTimeExpired;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,8 +30,8 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Vote newVote = VoteTestData.getNew();
-        Vote created = service.create(USER_ID, RESTAURANT_1_ID);
+        Vote newVote = getNew();
+        Vote created = service.create(newVote, USER_ID, RESTAURANT_1_ID);
         Integer newId = created.getId();
         newVote.setId(newId);
         assertMatch(created, newVote);
@@ -81,20 +83,24 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        Vote updated = getUpdated();
-        if (isVotingTimeExpired()) {
+        Vote newVote = getNew();
+        Vote created = service.create(newVote, USER_ID, RESTAURANT_1_ID);
+        assertMatch(newVote, created);
+        Vote updated = new Vote(created);
+        updated.setRestaurant(RESTAURANT_2);
+        if (isVoteChangeTimeExpired()) {
             IllegalRequestDataException e = assertThrows(IllegalRequestDataException.class, () -> update(updated));
             assertEquals(e.getMessage(), "Voting time expired at 11:00 AM");
         } else {
             update(updated);
-            assertMatch(service.get(VOTE_1_ID, USER_ID), updated);
+            assertMatch(service.get(created.getId(), USER_ID), updated);
         }
     }
 
     @Test
     void updateNotFound() {
-        if (!isVotingTimeExpired()) {
-            Vote updated = getUpdated();
+        if (!isVoteChangeTimeExpired()) {
+            Vote updated = getNew();
             updated.setId(1);
             NotFoundException e = assertThrows(NotFoundException.class, () -> update(updated));
             assertEquals(e.getMessage(), "Not found entity with id=" + 1);
@@ -102,15 +108,14 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void updateNotOwn() {
-        if (!isVotingTimeExpired()) {
-            NotFoundException e = assertThrows(NotFoundException.class, () ->
-                    service.update(new Vote(VOTE_1_USER_RESTAURANT_1), ADMIN_ID, RESTAURANT_2_ID));
-            assertEquals(e.getMessage(), "Not found entity with id=" + VOTE_1_ID);
-        }
+    void updateBackdate() {
+        Vote updated = new Vote(VOTE_1_USER_RESTAURANT_1);
+        IllegalRequestDataException e = assertThrows(IllegalRequestDataException.class, () ->
+                service.update(updated, ADMIN_ID, RESTAURANT_2_ID));
+        assertEquals(e.getMessage(), "Vote{id=" + updated.getId() + "} date=" + updated.getDate() + " must be today: " + LocalDate.now());
     }
 
-    private void update(Vote updated) {
-        service.update(updated, USER_ID, RESTAURANT_2_ID);
+    private void update(Vote vote) {
+        service.update(vote, USER_ID, RESTAURANT_2_ID);
     }
 }

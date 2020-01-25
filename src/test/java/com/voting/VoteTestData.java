@@ -30,12 +30,6 @@ public class VoteTestData {
         return new Vote(null, LocalDate.now(), USER, RESTAURANT_1);
     }
 
-    public static Vote getUpdated() {
-        Vote updated = new Vote(VOTE_1_USER_RESTAURANT_1);
-        updated.setRestaurant(RESTAURANT_2);
-        return updated;
-    }
-
     public static void assertMatch(Vote actual, Vote expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
     }

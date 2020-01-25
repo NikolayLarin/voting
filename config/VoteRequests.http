@@ -21,27 +21,50 @@ Authorization: Basic user@gmail.com password
 
 ###
 
-#create vote of current user for restaurant
-POST http://localhost:8080/voting/votes/100002
+#create backdate vote of current user for restaurant
+POST http://localhost:8080/voting/votes/
 Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "date": "2020-01-25",
+  "restaurantId": 100002
+}
+
+###
+
+#create vote of current user for restaurant
+POST http://localhost:8080/voting/votes/
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "restaurantId": 100002
+}
 
 ###
 
 # update vote of current user for restaurant
 # after 11:00 AM throw: Voting time expired at 11:00 AM
-PUT http://localhost:8080/voting/votes/100003
+PUT http://localhost:8080/voting/votes/100030
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
 {
-  "id": 100032,
-  "date": "2020-01-17"
+  "id": 100030,
+  "restaurantId": 100003
 }
 
 ###
 
+#get vote of current user
+GET http://localhost:8080/voting/votes/100030
+Authorization: Basic user@gmail.com password
+
+###
+
 # delete vote of current user
-DELETE http://localhost:8080/voting/votes/100032
+DELETE http://localhost:8080/voting/votes/100030
 Authorization: Basic user@gmail.com password
 
 ###

@@ -2,6 +2,7 @@ package com.voting.web.controller;
 
 import com.voting.model.Vote;
 import com.voting.service.VoteService;
+import com.voting.to.VoteTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static com.voting.util.ValidationUtil.assureIdConsistent;
+import static com.voting.util.ValidationUtil.checkNew;
 import static com.voting.web.SecurityUtil.authUserId;
 
 @RestController
@@ -50,21 +54,23 @@ public class VoteRestController {
         return service.get(id, authUserId());
     }
 
-    @PostMapping(value = "/{restaurantId}")
-    public ResponseEntity<Vote> createWithLocation(@PathVariable int restaurantId) {
-        log.info("create vote for restaurant with id={}", restaurantId);
-        Vote created = service.create(authUserId(), restaurantId);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Vote> createWithLocation(@Valid @RequestBody VoteTo voteTo) {
+        log.info("create vote for restaurant with id={}", voteTo.getRestaurantId());
+        checkNew(voteTo);
+        Vote created = service.create(voteTo, authUserId());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Vote vote, @PathVariable int restaurantId) {
-        log.info("update vote {} to restaurant with id={}", vote, restaurantId);
-        service.update(vote, authUserId(), restaurantId);
+    public void update(@Valid @RequestBody VoteTo voteTo, @PathVariable int id) {
+        log.info("update vote with id={} in favour of restaurant with id={}", voteTo.getId(), voteTo.getRestaurantId());
+        assureIdConsistent(voteTo, id);
+        service.update(voteTo, authUserId());
     }
 
     @DeleteMapping("/{id}")

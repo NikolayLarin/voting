@@ -31,7 +31,7 @@ public class DataJpaVoteRepository {
             return null;
         }
         vote.setUser(crudUserRepository.getOne(userId));
-        vote.setRestaurant(crudRestaurantRepository.getOne(restaurantId));
+        vote.setRestaurant(crudRestaurantRepository.findById(restaurantId).orElse(null));
         return crudVoteRepository.save(vote);
     }
 

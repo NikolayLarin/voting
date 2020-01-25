@@ -1,11 +1,12 @@
 package com.voting.util;
 
+import com.voting.HasDate;
 import com.voting.HasId;
-import com.voting.to.DishTo;
 import com.voting.util.exception.IllegalRequestDataException;
 import com.voting.util.exception.NotFoundException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ValidationUtil {
 
@@ -37,17 +38,6 @@ public class ValidationUtil {
         }
     }
 
-
-    public static DishTo checkDate(DishTo dishTo) {
-        final LocalDate date = dishTo.getDate();
-        if (date == null) {
-            dishTo.setDate(LocalDate.now());
-        } else if (!date.isEqual(LocalDate.now())) {
-            throw new IllegalRequestDataException("Dish date=" + date + " must be today: " + LocalDate.now());
-        }
-        return dishTo;
-    }
-
     public static void assureIdConsistent(HasId entity, int id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (entity.isNew()) {
@@ -70,5 +60,25 @@ public class ValidationUtil {
 
     public static String getMessage(Throwable e) {
         return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
+
+    public static <T extends HasDate> T checkDate(T t) {
+        return checkDateAndIsVoteChangeTimeExpired(t, false);
+    }
+
+    public static <T extends HasDate> T checkDateAndIsVoteChangeTimeExpired(T t, boolean checkExpiredTime) {
+        final LocalDate date = t.getDate();
+        if (date == null) {
+            t.setDate(LocalDate.now());
+        } else if (!date.isEqual(LocalDate.now())) {
+            throw new IllegalRequestDataException(t + " date=" + date + " must be today: " + LocalDate.now());
+        } else if (checkExpiredTime && isVoteChangeTimeExpired()) {
+            throw new IllegalRequestDataException("Vote change time expired at 11:00 AM");
+        }
+        return t;
+    }
+
+    public static boolean isVoteChangeTimeExpired() {
+        return LocalTime.now().isAfter(LocalTime.of(11, 0));
     }
 }

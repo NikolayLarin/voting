@@ -1,6 +1,7 @@
 package com.voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.voting.HasDate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames =
         {"restaurant_id", "date", "name"}, name = "dishes_unique_restaurant_date_name_idx")})
-public class Dish extends AbstractBaseEntity {
+public class Dish extends AbstractBaseEntity implements HasDate {
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -57,10 +58,12 @@ public class Dish extends AbstractBaseEntity {
         this.price = price;
     }
 
+    @Override
     public LocalDate getDate() {
         return date;
     }
 
+    @Override
     public void setDate(LocalDate date) {
         this.date = date;
     }

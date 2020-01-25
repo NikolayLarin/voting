@@ -2,14 +2,15 @@ package com.voting.service;
 
 import com.voting.model.Vote;
 import com.voting.repository.vote.DataJpaVoteRepository;
-import com.voting.util.exception.IllegalRequestDataException;
+import com.voting.to.VoteTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
-import static com.voting.util.DateTimeUtil.isVotingTimeExpired;
+import static com.voting.util.ToUtils.createFromTo;
+import static com.voting.util.ValidationUtil.checkDateAndIsVoteChangeTimeExpired;
 import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -22,8 +23,12 @@ public class VoteService {
         this.repository = repository;
     }
 
-    public Vote create(int userId, int restaurantId) {
-        return save(new Vote(), userId, restaurantId);
+    public Vote create(VoteTo voteTo, int userId) {
+        return create(createFromTo(voteTo), userId, voteTo.getRestaurantId());
+    }
+
+    public Vote create(Vote vote, int userId, int restaurantId) {
+        return save(checkDateAndIsVoteChangeTimeExpired(vote, false), userId, restaurantId);
     }
 
     public void delete(int id, int userId) {
@@ -38,11 +43,12 @@ public class VoteService {
         return repository.getAll(userId);
     }
 
+    public void update(VoteTo voteTo, int userId) {
+        update(createFromTo(voteTo), userId, voteTo.getRestaurantId());
+    }
+
     public void update(Vote vote, int userId, int restaurantId) {
-        if (isVotingTimeExpired()) {
-            throw new IllegalRequestDataException("Voting time expired at 11:00 AM");
-        }
-        save(vote, userId, restaurantId);
+        save(checkDateAndIsVoteChangeTimeExpired(vote, true), userId, restaurantId);
     }
 
     private Vote save(Vote vote, int userId, int restaurantId) {

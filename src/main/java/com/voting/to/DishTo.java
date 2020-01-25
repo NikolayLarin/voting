@@ -1,6 +1,6 @@
 package com.voting.to;
 
-import com.voting.HasId;
+import com.voting.HasDate;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -9,10 +9,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class DishTo implements HasId, Serializable {
+public class DishTo extends BaseTo implements HasDate, Serializable {
     private static final long serialVersionUID = 1L;
-
-    private Integer id;
 
     private LocalDate date;
 
@@ -29,26 +27,18 @@ public class DishTo implements HasId, Serializable {
     }
 
     public DishTo(Integer id, LocalDate date, String name, Integer price) {
-        this.id = id;
+        super(id);
         this.date = date;
         this.name = name;
         this.price = price;
     }
 
     @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public LocalDate getDate() {
         return date;
     }
 
+    @Override
     public void setDate(LocalDate date) {
         this.date = date;
     }
