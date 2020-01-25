@@ -50,10 +50,6 @@ public class DishService {
         return repository.getMenuOnDate(date, restaurantId);
     }
 
-    public List<Dish> getTodayMenus() {
-        return repository.getDayMenus(LocalDate.now());
-    }
-
     public List<Dish> getBetweenInclusive(LocalDate startDate, LocalDate endDate, int restaurantId) {
         return repository.getBetweenInclusive(
                 getStartInclusive(startDate).toLocalDate(),

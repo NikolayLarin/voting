@@ -1,0 +1,44 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+
+################        RestaurantRestController        ################
+
+#getAll returns all restaurants
+GET http://localhost:8080/voting/restaurants
+Authorization: Basic user@gmail.com password
+
+###
+
+#getAllTodayMenus returns all restaurants with today menu
+GET http://localhost:8080/voting/restaurants/menus
+Authorization: Basic user@gmail.com password
+
+###
+
+#get returns restaurant
+GET http://localhost:8080/voting/restaurants/100002
+Authorization: Basic user@gmail.com password
+
+###
+
+#getAll returns all dishes of restaurant
+GET http://localhost:8080/voting/restaurants/100002/dishes
+
+###
+
+#get returns dish of restaurant
+GET http://localhost:8080/voting/restaurants/100002/dishes/100005
+
+###
+
+#get throws NotFoundException: dish don't belong to restaurant
+GET http://localhost:8080/voting/restaurants/100002/dishes/100007
+
+###
+###############################  end  ##################################

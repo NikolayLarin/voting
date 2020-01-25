@@ -31,7 +31,7 @@ import static com.voting.web.SecurityUtil.authUserId;
 @RestController
 @RequestMapping(ProfileRestController.REST_URL)
 public class ProfileRestController {
-    static final String REST_URL = "/auth/profile";
+    static final String REST_URL = "/profile";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

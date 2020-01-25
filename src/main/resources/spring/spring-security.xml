@@ -6,29 +6,16 @@
              http://www.springframework.org/schema/security
              http://www.springframework.org/schema/security/spring-security.xsd">
 
-
-    <http pattern="/auth/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
+    <http use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
         <http-basic/>
-        <intercept-url pattern="/auth/admin/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/auth/profile/register" access="isAnonymous()"/>
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/profile/register" access="isAnonymous()"/>
+        <intercept-url pattern="/restaurants" access="permitAll()"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <csrf disabled="true"/>
     </http>
 
     <!--    <beans:bean class="org.springframework.security.crypto.factory.PasswordEncoderFactories" id="passwordEncoder" factory-method="createDelegatingPasswordEncoder"/>-->
-
-    <http>
-        <intercept-url pattern="/login" access="permitAll()"/>
-        <intercept-url pattern="/menus/**" access="permitAll()"/>
-        <intercept-url pattern="/restaurants/**" access="permitAll()"/>
-        <intercept-url pattern="/profile/register/**" access="isAnonymous()"/>
-
-        <form-login login-page="/login" default-target-url="/meals"
-                    authentication-failure-url="/login?error=true"
-                    login-processing-url="/spring_security_check"/>
-        <logout logout-success-url="/login"/>
-        <csrf disabled="true"/>
-    </http>
 
     <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
 

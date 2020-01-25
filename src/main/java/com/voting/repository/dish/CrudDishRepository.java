@@ -36,7 +36,4 @@ public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
     List<Dish> getBetweenInclusive(@Param("startDate") LocalDate startDate,
                                    @Param("endDate") LocalDate endDate,
                                    @Param("restaurantId") int restaurantId);
-
-    @Query("SELECT d FROM Dish d WHERE d.date=:date ORDER BY d.price ASC")
-    List<Dish> getDayMenus(@Param("date") LocalDate date);
 }

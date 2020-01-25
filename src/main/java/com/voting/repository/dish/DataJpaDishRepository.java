@@ -54,11 +54,6 @@ public class DataJpaDishRepository {
         return dishRepository.getMenuOnDate(date, restaurantId);
     }
 
-    // ORDERED by price asc
-    public List<Dish> getDayMenus(LocalDate date) {
-        return dishRepository.getDayMenus(date);
-    }
-
     // ORDERED by date desc, price asc
     public List<Dish> getBetweenInclusive(LocalDate startDate, LocalDate endDate, int restaurantId) {
         return dishRepository.getBetweenInclusive(startDate, endDate, restaurantId);

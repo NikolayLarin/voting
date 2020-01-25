@@ -27,7 +27,7 @@ import static com.voting.web.SecurityUtil.authUserId;
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
-    static final String REST_URL = "/auth/votes";
+    static final String REST_URL = "/votes";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

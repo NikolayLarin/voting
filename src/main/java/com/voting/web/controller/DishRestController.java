@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = DishRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishRestController {
-    static final String REST_URL = "/menus";
+    static final String REST_URL = "menus";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -31,12 +31,6 @@ public class DishRestController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<Dish> getTodayMenus() {
-        log.info("getTodayMenus");
-        return service.getTodayMenus();
-    }
-
     @GetMapping("/{restaurantId}")
     public List<Dish> getMenuOnDate(@RequestParam @NonNull LocalDate date,
                                     @PathVariable int restaurantId) {
@@ -45,9 +39,9 @@ public class DishRestController {
     }
 
     @GetMapping("/{restaurantId}/filter")
-    public List<Dish> getBetween(@RequestParam @Nullable LocalDate startDate,
-                                 @RequestParam @Nullable LocalDate endDate,
-                                 @PathVariable int restaurantId) {
+    public List<Dish> getBetweenInclusive(@RequestParam @Nullable LocalDate startDate,
+                                          @RequestParam @Nullable LocalDate endDate,
+                                          @PathVariable int restaurantId) {
         log.info("getAll dishes of restaurant {} between dates ({} – {})", restaurantId, startDate, endDate);
         return service.getBetweenInclusive(startDate, endDate, restaurantId);
     }

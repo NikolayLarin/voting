@@ -1,0 +1,91 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+
+################          ProfileRestController         ################
+
+# get admin
+GET http://localhost:8080/voting/profile
+Authorization: Basic admin@gmail.com admin
+
+###
+
+# get user
+GET http://localhost:8080/voting/profile
+Authorization: Basic user@gmail.com password
+
+###
+
+# get admin by email
+GET http://localhost:8080/voting/profile/by?email=admin@gmail.com
+Authorization: Basic admin@gmail.com admin
+
+###
+
+# get user by email
+GET http://localhost:8080/voting/profile/by?email=user@gmail.com
+Authorization: Basic user@gmail.com password
+
+###
+
+# createWithLocation user
+POST http://localhost:8080/voting/profile/register
+Content-Type: application/json
+
+{
+  "email": "newUser@gmail.com",
+  "password": "newPassword",
+  "roles": [
+    "ROLE_USER"
+  ]
+}
+
+###
+
+# update user
+PUT http://localhost:8080/voting/profile
+Authorization: Basic newuser@gmail.com newPassword
+Content-Type: application/json
+
+{
+  "email": "newUser@gmail.com",
+  "password": "newPassword_updated",
+  "roles": [
+    "ROLE_USER"
+  ]
+}
+
+###
+
+# update user with existing in db email
+PUT http://localhost:8080/voting/profile
+Authorization: Basic newuser@gmail.com newPassword_updated
+Content-Type: application/json
+
+{
+  "email": "user@gmail.com",
+  "password": "newPassword_updated",
+  "roles": [
+    "ROLE_USER"
+  ]
+}
+
+###
+
+# get user by email
+GET http://localhost:8080/voting/profile/by?email=newUser@gmail.com
+Authorization: Basic newUser@gmail.com newPassword_updated
+
+###
+
+# delete user (all votes will be deleted too)
+DELETE http://localhost:8080/voting/profile
+Authorization: Basic user@gmail.com password
+
+###
+###############################  end  ##################################

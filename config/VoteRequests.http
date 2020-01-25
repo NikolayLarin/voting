@@ -1,0 +1,48 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+
+################           VoteRestController           ################
+
+#getAll votes of current user)
+GET http://localhost:8080/voting/votes
+Authorization: Basic admin@gmail.com admin
+
+###
+
+#get vote of current user
+GET http://localhost:8080/voting/votes/100028
+Authorization: Basic user@gmail.com password
+
+###
+
+#create vote of current user for restaurant
+POST http://localhost:8080/voting/votes/100002
+Authorization: Basic user@gmail.com password
+
+###
+
+# update vote of current user for restaurant
+# after 11:00 AM throw: Voting time expired at 11:00 AM
+PUT http://localhost:8080/voting/votes/100003
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "id": 100032,
+  "date": "2020-01-17"
+}
+
+###
+
+# delete vote of current user
+DELETE http://localhost:8080/voting/votes/100032
+Authorization: Basic user@gmail.com password
+
+###
+###############################  end  ##################################

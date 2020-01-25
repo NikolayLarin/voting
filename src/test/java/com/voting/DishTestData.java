@@ -3,10 +3,8 @@ package com.voting;
 import com.voting.model.Dish;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.voting.model.AbstractBaseEntity.START_SEQ;
 import static java.time.LocalDate.now;
@@ -70,13 +68,6 @@ public class DishTestData {
             .stream()
             .filter(dish ->
                     dish.getDate().isAfter(DATE_2020_01_10.minusDays(1)) && dish.getDate().isBefore(DATE_2020_01_11.plusDays(1)))
-            .collect(Collectors.toList());
-
-
-    public static final List<Dish> MENUS_ON_NOW = Stream
-            .concat(Stream.concat(RESTAURANT_1_DISHES.stream(), RESTAURANT_2_DISHES.stream()), RESTAURANT_3_DISHES.stream())
-            .filter(dish -> dish.getDate().isEqual(LocalDate.now()))
-            .sorted(Comparator.comparing(Dish::getPrice))
             .collect(Collectors.toList());
 
     public static Dish getNew() {

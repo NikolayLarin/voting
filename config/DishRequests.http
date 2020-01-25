@@ -7,8 +7,10 @@
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
 ################           DishRestController           ################
+
 # getTodayMenus
 GET http://localhost:8080/voting/menus
+Authorization: Basic user@gmail.com password
 
 ###
 
@@ -40,39 +42,6 @@ GET http://localhost:8080/voting/menus/100002/filter
 
 # getBetween with empy dates returns all dishes
 GET http://localhost:8080/voting/menus/100002/filter?startDate=&endDate=
-
-###
-###############################  end  ##################################
-
-
-################        RestaurantRestController        ################
-#getAll returns all restaurants
-GET http://localhost:8080/voting/restaurants
-
-###
-
-#getAllTodayMenus returns all restaurants with today menu
-GET http://localhost:8080/voting/restaurants/menus
-
-###
-
-#get returns restaurant
-GET http://localhost:8080/voting/restaurants/100002
-
-###
-
-#getAll returns all dishes of restaurant
-GET http://localhost:8080/voting/restaurants/100002/dishes
-
-###
-
-#get returns dish of restaurant
-GET http://localhost:8080/voting/restaurants/100002/dishes/100005
-
-###
-
-#get throws NotFoundException: dish don't belong to restaurant
-GET http://localhost:8080/voting/restaurants/100002/dishes/100007
 
 ###
 ###############################  end  ##################################

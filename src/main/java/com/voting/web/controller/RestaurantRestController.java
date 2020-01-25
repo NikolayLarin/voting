@@ -41,8 +41,7 @@ public class RestaurantRestController {
     @GetMapping("/menus")
     public List<Restaurant> getAllTodayMenus() {
         log.info("getAllTodayMenus");
-        final List<Restaurant> allWithTodayMenu = restaurantService.getAllWithTodayMenu();
-        return allWithTodayMenu;
+        return restaurantService.getAllWithTodayMenu();
     }
 
     @GetMapping("/{id}")
