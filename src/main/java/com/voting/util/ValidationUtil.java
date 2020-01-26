@@ -72,7 +72,8 @@ public class ValidationUtil {
             t.setDate(LocalDate.now());
         } else if (!date.isEqual(LocalDate.now())) {
             throw new IllegalRequestDataException(t + " date=" + date + " must be today: " + LocalDate.now());
-        } else if (checkExpiredTime && isVoteChangeTimeExpired()) {
+        }
+        if (checkExpiredTime && isVoteChangeTimeExpired()) {
             throw new IllegalRequestDataException("Vote change time expired at 11:00 AM");
         }
         return t;

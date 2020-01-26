@@ -90,7 +90,7 @@ class VoteServiceTest extends AbstractServiceTest {
         updated.setRestaurant(RESTAURANT_2);
         if (isVoteChangeTimeExpired()) {
             IllegalRequestDataException e = assertThrows(IllegalRequestDataException.class, () -> update(updated));
-            assertEquals(e.getMessage(), "Voting time expired at 11:00 AM");
+            assertEquals(e.getMessage(), "Vote change time expired at 11:00 AM");
         } else {
             update(updated);
             assertMatch(service.get(created.getId(), USER_ID), updated);
