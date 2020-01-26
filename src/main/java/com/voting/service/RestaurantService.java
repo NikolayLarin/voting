@@ -3,6 +3,8 @@ package com.voting.service;
 import com.voting.model.Restaurant;
 import com.voting.repository.restaurant.DataJpaRestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -21,10 +23,12 @@ public class RestaurantService {
         this.repository = repository;
     }
 
+    @CacheEvict(value = {"restaurants", "allRestaurantsWithTodayMenu"}, allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         return save(restaurant);
     }
 
+    @CacheEvict(value = {"restaurants", "allRestaurantsWithTodayMenu"}, allEntries = true)
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id), id);
     }
@@ -33,14 +37,17 @@ public class RestaurantService {
         return checkNotFoundWithId(repository.get(id), id);
     }
 
+    @Cacheable("restaurants")
     public List<Restaurant> getAll() {
         return repository.getAll();
     }
 
+    @CacheEvict(value = {"restaurants", "allRestaurantsWithTodayMenu"}, allEntries = true)
     public void update(Restaurant restaurant) {
         save(restaurant);
     }
 
+    @Cacheable("allRestaurantsWithTodayMenu")
     public List<Restaurant> getAllWithTodayMenu() {
         return repository.getAllWithDishesOnDate(LocalDate.now());
     }

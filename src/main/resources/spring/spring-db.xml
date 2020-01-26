@@ -37,9 +37,6 @@
           p:removeAbandoned="true"
           p:testWhileIdle="true"
     />
-    <!--tests failed:-->
-    <!--p:testOnBorrow="true"-->
-    <!--p:testOnConnect="true"-->
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="dataSource"

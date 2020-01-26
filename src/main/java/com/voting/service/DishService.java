@@ -4,6 +4,7 @@ import com.voting.model.Dish;
 import com.voting.repository.dish.DataJpaDishRepository;
 import com.voting.to.DishTo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -26,14 +27,17 @@ public class DishService {
         this.repository = repository;
     }
 
+    @CacheEvict(value = "allRestaurantsWithTodayMenu", allEntries = true)
     public Dish create(DishTo dishTo, int restaurantId) {
-        return save(createFromTo(checkDate(dishTo)), restaurantId);
+        return create(createFromTo(checkDate(dishTo)), restaurantId);
     }
 
+    @CacheEvict(value = "allRestaurantsWithTodayMenu", allEntries = true)
     public Dish create(Dish dish, int restaurantId) {
         return save(dish, restaurantId);
     }
 
+    @CacheEvict(value = "allRestaurantsWithTodayMenu", allEntries = true)
     public void delete(int id, int restaurantId) {
         checkNotFoundWithId(repository.delete(id, restaurantId), id);
     }
@@ -57,10 +61,12 @@ public class DishService {
                 restaurantId);
     }
 
+    @CacheEvict(value = "allRestaurantsWithTodayMenu", allEntries = true)
     public void update(DishTo dishTo, int restaurantId) {
         update(createFromTo(checkDate(dishTo)), restaurantId);
     }
 
+    @CacheEvict(value = "allRestaurantsWithTodayMenu", allEntries = true)
     public void update(Dish dish, int restaurantId) {
         save(dish, restaurantId);
     }
