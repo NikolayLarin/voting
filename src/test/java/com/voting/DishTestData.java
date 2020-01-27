@@ -1,11 +1,14 @@
 package com.voting;
 
 import com.voting.model.Dish;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.voting.TestUtil.readFromJsonMvcResult;
+import static com.voting.TestUtil.readListFromJsonMvcResult;
 import static com.voting.model.AbstractBaseEntity.START_SEQ;
 import static java.time.LocalDate.now;
 import static java.time.LocalDate.of;
@@ -71,7 +74,7 @@ public class DishTestData {
             .collect(Collectors.toList());
 
     public static Dish getNew() {
-        return new Dish(null, now(), "newDish", 2500);//, RESTAURANT_1_ID);
+        return new Dish(null, now(), "newDish", 2500);
     }
 
     public static Dish getUpdated() {
@@ -90,5 +93,13 @@ public class DishTestData {
 
     public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("restaurant").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(Dish expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, Dish.class), expected);
+    }
+
+    public static ResultMatcher contentJson(Iterable<Dish> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Dish.class), expected);
     }
 }

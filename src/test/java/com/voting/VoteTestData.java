@@ -1,6 +1,7 @@
 package com.voting;
 
 import com.voting.model.Vote;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,6 +11,8 @@ import static com.voting.DishTestData.DATE_2020_01_11;
 import static com.voting.RestaurantTestData.RESTAURANT_1;
 import static com.voting.RestaurantTestData.RESTAURANT_2;
 import static com.voting.RestaurantTestData.RESTAURANT_3;
+import static com.voting.TestUtil.readFromJsonMvcResult;
+import static com.voting.TestUtil.readListFromJsonMvcResult;
 import static com.voting.UserTestData.ADMIN;
 import static com.voting.UserTestData.USER;
 import static com.voting.model.AbstractBaseEntity.START_SEQ;
@@ -23,8 +26,11 @@ public class VoteTestData {
     public static final Vote VOTE_3_USER_RESTAURANT_2 = new Vote(VOTE_1_ID + 2, DATE_2020_01_11, USER, RESTAURANT_2);
     public static final Vote VOTE_4_ADMIN_RESTAURANT_3 = new Vote(VOTE_1_ID + 3, DATE_2020_01_11, ADMIN, RESTAURANT_3);
 
+    public static final Vote VOTE_5_NOW_ADMIN_RESTAURANT_1 = new Vote(VOTE_1_ID + 4, LocalDate.now(), USER, RESTAURANT_1);
+
     public static final List<Vote> USER_VOTES = List.of(VOTE_3_USER_RESTAURANT_2, VOTE_1_USER_RESTAURANT_1);
-    public static final List<Vote> ADMIN_VOTES = List.of(VOTE_4_ADMIN_RESTAURANT_3, VOTE_2_ADMIN_RESTAURANT_1);
+    public static final List<Vote> ADMIN_VOTES = List.of(
+            VOTE_5_NOW_ADMIN_RESTAURANT_1, VOTE_4_ADMIN_RESTAURANT_3, VOTE_2_ADMIN_RESTAURANT_1);
 
     public static Vote getNew() {
         return new Vote(null, LocalDate.now(), USER, RESTAURANT_1);
@@ -40,5 +46,17 @@ public class VoteTestData {
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("user", "restaurant").isEqualTo(expected);
+    }
+
+    public static void assertMatchWithRestaurant(Iterable<Vote> actual, Iterable<Vote> expected) {
+        assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJsonWithRestaurant(Iterable<Vote> expected) {
+        return result -> assertMatchWithRestaurant(readListFromJsonMvcResult(result, Vote.class), expected);
+    }
+
+    public static ResultMatcher contentJson(Vote expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, Vote.class), expected);
     }
 }

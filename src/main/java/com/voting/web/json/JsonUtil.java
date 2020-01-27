@@ -8,7 +8,6 @@ import java.util.List;
 
 import static com.voting.web.json.JacksonObjectMapper.getMapper;
 
-
 public class JsonUtil {
 
     public static <T> List<T> readValues(String json, Class<T> clazz) {

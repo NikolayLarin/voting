@@ -51,13 +51,13 @@ public class RestaurantRestController {
     }
 
     @GetMapping("/{id}/dishes")
-    public List<Dish> getAll(@PathVariable int id) {
+    public List<Dish> getAllDishes(@PathVariable int id) {
         log.info("getAllDishes of restaurant {}", id);
         return dishService.getAll(id);
     }
 
     @GetMapping("/{id}/dishes/{dishId}")
-    public Dish get(@PathVariable int id, @PathVariable int dishId) {
+    public Dish getDish(@PathVariable int id, @PathVariable int dishId) {
         log.info("get dish {} of restaurant {}", dishId, id);
         return dishService.get(dishId, id);
     }

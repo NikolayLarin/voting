@@ -8,7 +8,7 @@ import com.voting.to.VoteTo;
 public class ToUtils {
 
     public static Dish createFromTo(DishTo dishTo) {
-        return new Dish(null, dishTo.getDate(), dishTo.getName(), dishTo.getPrice());
+        return new Dish(dishTo.getId(), dishTo.getDate(), dishTo.getName(), dishTo.getPrice());
     }
 
     public static Vote createFromTo(VoteTo voteTo) {

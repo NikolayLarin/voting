@@ -2,12 +2,16 @@ package com.voting;
 
 import com.voting.model.Dish;
 import com.voting.model.Restaurant;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.voting.TestUtil.readFromJsonMvcResult;
+import static com.voting.TestUtil.readListFromJsonMvcResult;
 import static com.voting.model.AbstractBaseEntity.START_SEQ;
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RestaurantTestData {
@@ -43,6 +47,13 @@ public class RestaurantTestData {
         return null;
     }
 
+    public static List<Restaurant> getRestaurantsWithTodayMenu() {
+        RESTAURANT_1.setDishes(getDishesOnDate(RESTAURANT_1_ID, now()));
+        RESTAURANT_2.setDishes(getDishesOnDate(RESTAURANT_2_ID, now()));
+        RESTAURANT_3.setDishes(getDishesOnDate(RESTAURANT_3_ID, now()));
+        return List.of(RESTAURANT_1, RESTAURANT_2, RESTAURANT_3);
+    }
+
     public static void assertMatch(Restaurant actual, Restaurant expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "dishes");
     }
@@ -53,6 +64,26 @@ public class RestaurantTestData {
 
     public static void assertMatch(Iterable<Restaurant> actual, Iterable<Restaurant> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("dishes").isEqualTo(expected);
+    }
+
+    public static void assertMatchWithDishes(Iterable<Restaurant> actual, Iterable<Restaurant> expected) {
+        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(Restaurant... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class), List.of(expected));
+    }
+
+    public static ResultMatcher contentJson(Restaurant expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, Restaurant.class), expected);
+    }
+
+    public static ResultMatcher contentJson(Iterable<Restaurant> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class), expected);
+    }
+
+    public static ResultMatcher contentJsonWithDishes(Iterable<Restaurant> expected) {
+        return result -> assertMatchWithDishes(readListFromJsonMvcResult(result, Restaurant.class), expected);
     }
 
     private static List<Dish> getOnDate(List<Dish> dishes, LocalDate date) {
