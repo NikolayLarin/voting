@@ -9,13 +9,13 @@
 
 ################          ProfileRestController         ################
 
-# get admin
+# get
 GET http://localhost:8080/voting/profile
 Authorization: Basic admin@gmail.com admin
 
 ###
 
-# get user
+# get
 GET http://localhost:8080/voting/profile
 Authorization: Basic user@gmail.com password
 
@@ -85,7 +85,7 @@ Authorization: Basic newUser@gmail.com newPassword_updated
 
 # delete user (all votes will be deleted too)
 DELETE http://localhost:8080/voting/profile
-Authorization: Basic user@gmail.com password
+Authorization: Basic newUser@gmail.com newPassword_updated
 
 ###
 ###############################  end  ##################################

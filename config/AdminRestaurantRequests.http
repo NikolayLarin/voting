@@ -9,7 +9,7 @@
 
 ################      AdminRestaurantRestController     ################
 
-# createWithLocation restaurant
+# createWithLocation restaurant not valid name
 POST http://localhost:8080/voting/admin/restaurants
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -20,6 +20,7 @@ Content-Type: application/json
 
 ###
 
+#createWithLocation restaurant
 POST http://localhost:8080/voting/admin/restaurants
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -31,7 +32,7 @@ Content-Type: application/json
 ###
 
 # update restaurant
-PUT http://localhost:8080/voting/admin/restaurants/100030
+PUT http://localhost:8080/voting/admin/restaurants/100031
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
 
@@ -41,7 +42,7 @@ Content-Type: application/json
 
 ###
 
-# update restaurant
+# update not fund restaurant
 PUT http://localhost:8080/voting/admin/restaurants/1
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json
@@ -52,16 +53,15 @@ Content-Type: application/json
 
 ###
 
-# delete restaurant
-DELETE http://localhost:8080/voting/admin/restaurants/1000030
-Authorization: Basic admin@gmail.com admin
+# delete forbidden
+DELETE http://localhost:8080/voting/admin/restaurants/100031
+Authorization: Basic user@gmail.com password
 
 ###
 
-
-# delete forbidden
-DELETE http://localhost:8080/voting/admin/restaurants/1000030
-Authorization: Basic user@gmail.com password
+# delete restaurant
+DELETE http://localhost:8080/voting/admin/restaurants/100031
+Authorization: Basic admin@gmail.com admin
 
 ###
 ###############################  end  ##################################

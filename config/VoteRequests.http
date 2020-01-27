@@ -9,7 +9,7 @@
 
 ################           VoteRestController           ################
 
-#getAll votes of current user)
+#getAll votes of current user
 GET http://localhost:8080/voting/votes
 Authorization: Basic admin@gmail.com admin
 
@@ -22,19 +22,19 @@ Authorization: Basic user@gmail.com password
 ###
 
 #create backdate vote of current user for restaurant
-POST http://localhost:8080/voting/votes/
+POST http://localhost:8080/voting/votes
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
 {
   "date": "2020-01-25",
-  "restaurantId": 100002
+  "restaurantId": 100003
 }
 
 ###
 
 #create vote of current user for restaurant
-POST http://localhost:8080/voting/votes/
+POST http://localhost:8080/voting/votes
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
@@ -46,25 +46,25 @@ Content-Type: application/json
 
 # update vote of current user for restaurant
 # after 11:00 AM throw: Voting time expired at 11:00 AM
-PUT http://localhost:8080/voting/votes/100030
+PUT http://localhost:8080/voting/votes/100031
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
 {
-  "id": 100030,
+  "id": 100031,
   "restaurantId": 100003
 }
 
 ###
 
 #get vote of current user
-GET http://localhost:8080/voting/votes/100030
+GET http://localhost:8080/voting/votes/100031
 Authorization: Basic user@gmail.com password
 
 ###
 
 # delete vote of current user
-DELETE http://localhost:8080/voting/votes/100030
+DELETE http://localhost:8080/voting/votes/100031
 Authorization: Basic user@gmail.com password
 
 ###

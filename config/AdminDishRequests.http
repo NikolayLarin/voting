@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ###
 
-# createWithLocation dish for restaurant
+# createWithLocation dish not valid name for restaurant
 POST http://localhost:8080/voting/admin/restaurants/100002/dishes
 Authorization: Basic admin@gmail.com admin
 Content-Type: application/json

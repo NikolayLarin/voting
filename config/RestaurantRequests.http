@@ -11,7 +11,6 @@
 
 #getAll returns all restaurants
 GET http://localhost:8080/voting/restaurants
-Authorization: Basic user@gmail.com password
 
 ###
 
@@ -29,16 +28,21 @@ Authorization: Basic user@gmail.com password
 
 #getAll returns all dishes of restaurant
 GET http://localhost:8080/voting/restaurants/100002/dishes
+Authorization: Basic user@gmail.com password
+
 
 ###
 
 #get returns dish of restaurant
 GET http://localhost:8080/voting/restaurants/100002/dishes/100005
+Authorization: Basic user@gmail.com password
+
 
 ###
 
 #get throws NotFoundException: dish don't belong to restaurant
 GET http://localhost:8080/voting/restaurants/100002/dishes/100007
+Authorization: Basic user@gmail.com password
 
 ###
 ###############################  end  ##################################
