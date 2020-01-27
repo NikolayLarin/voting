@@ -1,5 +1,7 @@
 package com.voting.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.voting.View;
 import com.voting.model.User;
 import com.voting.service.UserService;
 import org.slf4j.Logger;
@@ -51,17 +53,20 @@ public class ProfileRestController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonNoPassword.class)
     public User get() {
         log.info("get {}", authUserId());
         return service.get(authUserId());
     }
 
     @GetMapping("/by")
+    @JsonView(View.JsonNoPassword.class)
     public User getByMail(@RequestParam String email) {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
     }
 
+    @JsonView(View.JsonNoPassword.class)
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<User> register(@Valid @RequestBody User user) {
