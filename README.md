@@ -1,4 +1,4 @@
-### Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
+## Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
 
 The task is:
 
@@ -21,10 +21,9 @@ It should contain the code and **README.md with API documentation and curl comma
 
 ------
 
+## Implementation.
+
 ### Curl samples (application deployed in application context `voting`).
-=======
-### curl samples (application deployed in application context `voting`).
->>>>>>> parent of d8c2238... readme update
 > For windows use `Git Bash`
 
 #### get All Restaurants
