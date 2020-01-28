@@ -5,16 +5,21 @@ import com.voting.model.Role;
 import com.voting.model.User;
 import com.voting.service.RestaurantService;
 import com.voting.service.UserService;
+import com.voting.web.controller.VoteRestController;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
+
+import static com.voting.UserTestData.USER;
 
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 automatic resource management
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext(
-                "spring/spring-app.xml", "spring/spring-db.xml")) {
+                "spring/spring-app.xml", "spring/spring-db.xml", "spring/spring-mvc.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
 
             System.out.println("\n_______________________________");
@@ -28,6 +33,14 @@ public class SpringMain {
             restaurantService.create(new Restaurant(null, "New_Restaurant_1"));
             restaurantService.create(new Restaurant(null, "New_Restaurant_2"));
             System.out.println("\nrestaurantService.getAll(): \n" + restaurantService.getAll());
+
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            new AuthorizedUser(USER), null, USER.getRoles()));
+
+            VoteRestController voteController = appCtx.getBean(VoteRestController.class);
+            System.out.println(voteController.getAll());
+
         }
     }
 }

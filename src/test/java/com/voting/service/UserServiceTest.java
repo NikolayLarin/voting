@@ -113,7 +113,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void createWithException() {
         validateRootCause(() -> service.create(new User(null, "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "user@gmail.com", "pass", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "user@gmail.com", " ", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "user@gmail.com", "password", Role.ROLE_USER)), HsqlException.class);
     }
 }

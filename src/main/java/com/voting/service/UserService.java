@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -21,10 +23,13 @@ import static com.voting.util.ValidationUtil.checkNotFoundWithId;
 public class UserService implements UserDetailsService {
 
     private final DataJpaUserRepository repository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public UserService(DataJpaUserRepository repository) {
+    public UserService(DataJpaUserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -62,8 +67,10 @@ public class UserService implements UserDetailsService {
     }
 
     private User prepareAndSave(User user) {
-        user.setEmail(user.getEmail().toLowerCase());
         Assert.notNull(user, "user must not be null");
+        user.setEmail(user.getEmail().toLowerCase());
+        String password = user.getPassword();
+        user.setPassword(StringUtils.hasText(password) ? passwordEncoder.encode(password) : password);
         return checkNotFoundWithId(repository.save(user), user.getId());
     }
 }
