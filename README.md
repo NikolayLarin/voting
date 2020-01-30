@@ -1,3 +1,7 @@
+Java Enterprise application "Voting system for deciding where to have lunch"
+===============================
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/806095d8c1c041049d82c1ca776a25ce)](https://www.codacy.com/manual/NikolayLarin/voting?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NikolayLarin/voting&amp;utm_campaign=Badge_Grade)
+===============================
 ## Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
 
 The task is:
