@@ -51,6 +51,17 @@ class AdminDishRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createXss() throws Exception {
+        DishTo newDishTo = new DishTo(null, null, "name<script>alert('XSS')</script>", 2500);
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_TEST_URL)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDishTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_TEST_URL + "/" + DISH_1_ID)
                 .with(userHttpBasic(ADMIN)))

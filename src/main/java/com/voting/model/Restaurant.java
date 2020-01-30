@@ -1,6 +1,7 @@
 package com.voting.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.voting.web.XssEscape;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,6 +22,7 @@ public class Restaurant extends AbstractBaseEntity {
     @NotBlank
     @Size(min = 2, max = 100)
     @Column(name = "name", nullable = false)
+    @XssEscape
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.PERSIST)

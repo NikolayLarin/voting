@@ -2,6 +2,7 @@ package com.voting.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.voting.View;
+import com.voting.web.XssEscape;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -33,6 +34,7 @@ public class User extends AbstractBaseEntity {
     @Email
     @NotBlank
     @Size(max = 100)
+    @XssEscape
     private String email;
 
     @Column(name = "password", nullable = false)

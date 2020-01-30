@@ -1,6 +1,7 @@
 package com.voting.to;
 
 import com.voting.HasDate;
+import com.voting.web.XssEscape;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -16,7 +17,9 @@ public class DishTo extends BaseTo implements HasDate, Serializable {
 
     @NotBlank
     @Size(min = 2, max = 120)
-//    @SafeHtml // https://stackoverflow.com/questions/17480809
+//    @SafeHtml // https://stackoverflow.com/questions/17480809,
+//    deprecated because of vulnerability https://in.relation.to/2019/11/20/hibernate-validator-610-6018-released/
+    @XssEscape
     private String name;
 
     @Range(min = 1)

@@ -40,7 +40,6 @@ public class SpringMain {
 
             VoteRestController voteController = appCtx.getBean(VoteRestController.class);
             System.out.println(voteController.getAll());
-
         }
     }
 }

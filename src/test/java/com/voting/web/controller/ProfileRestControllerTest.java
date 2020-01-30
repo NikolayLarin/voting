@@ -70,6 +70,17 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void registerXSS() throws Exception {
+        User newUser = getNew();
+        newUser.setEmail("e<script src=//my.evil.site/is/attacking/u.js></script>mail@gmail.com");
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUser)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void update() throws Exception {
         User updated = getUpdated();
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
