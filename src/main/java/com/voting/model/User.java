@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.voting.View;
 import com.voting.web.XssEscape;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.CollectionTable;
@@ -43,7 +41,6 @@ public class User extends AbstractBaseEntity {
     @JsonView(View.JsonPassword.class)
     private String password;
 
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -57,13 +56,6 @@ public class ProfileRestController {
     public User get() {
         log.info("get {}", authUserId());
         return service.get(authUserId());
-    }
-
-    @GetMapping("/by")
-    @JsonView(View.JsonNoPassword.class)
-    public User getByMail(@RequestParam String email) {
-        log.info("getByEmail {}", email);
-        return service.getByEmail(email);
     }
 
     @JsonView(View.JsonNoPassword.class)

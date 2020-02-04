@@ -63,16 +63,17 @@ public class ValidationUtil {
     }
 
     public static <T extends HasDate> T checkDate(T t) {
-        return checkDateAndIsVoteChangeTimeExpired(t, false);
-    }
-
-    public static <T extends HasDate> T checkDateAndIsVoteChangeTimeExpired(T t, boolean checkExpiredTime) {
         final LocalDate date = t.getDate();
         if (date == null) {
             t.setDate(LocalDate.now());
         } else if (!date.isEqual(LocalDate.now())) {
             throw new IllegalRequestDataException(t + " date=" + date + " must be today: " + LocalDate.now());
         }
+        return t;
+    }
+
+    public static <T extends HasDate> T checkDateAndIsVoteChangeTimeExpired(T t, boolean checkExpiredTime) {
+        checkDate(t);
         if (checkExpiredTime && isVoteChangeTimeExpired()) {
             throw new IllegalRequestDataException("Vote change time expired at 11:00 AM");
         }
